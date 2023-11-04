@@ -35,19 +35,18 @@ const LoginScreen = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    navigation.navigate('TabNavigator', { screen: 'ProjectOverview' });
   
     const errors = validateForm();
   
-    if (errors.length === 0) {
-      // Add your login logic here
-      console.log(`Email: ${email}, Password: ${password}`);
-    } else {
-      Alert.alert('Error', errors.join('\n'), [{ text: 'Ok' }]);
+    // if (errors.length === 0) {
+    //   console.log(`Email: ${email}, Password: ${password}`);
+    // } else {
+    //   Alert.alert('Error', errors.join('\n'), [{ text: 'Ok' }]);
 
-    }
-    // Clear fields after successful login
-    setEmail('');
-    setPassword('');
+    // }
+    // setEmail('');
+    // setPassword('');
   };
   
 
