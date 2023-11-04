@@ -20,7 +20,7 @@ export const styles =  StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 32,
   },
-  forgotPasswordContainer: {
+  extraContentContainer: {
     alignItems: 'flex-end',
   },
   form: {
@@ -74,5 +74,8 @@ export const styles =  StyleSheet.create({
   },
   selectContainer: {
     paddingLeft: 0,
+  },
+  signupbtn: {
+    fontWeight: 'bold'
   }
 });

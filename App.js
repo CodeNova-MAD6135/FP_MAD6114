@@ -1,13 +1,12 @@
 import React from 'react';
 import { styles } from './components/Styles';
 import Login from './components/Login';
-import Register from './components/Register';
+import Navigation from "./Navigation";
 
 const App = () => {
   
   return (
-    <Login />
-    // <Register />
+    <Navigation />
   );
 };
 

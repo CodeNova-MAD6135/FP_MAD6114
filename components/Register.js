@@ -15,8 +15,15 @@ import RNPickerSelect from 'react-native-picker-select';
 import { styles } from './Styles'; 
 import SizedBox from './SizedBox';
 import { Controller, useForm } from '../node_modules/react-hook-form';
+import { useNavigation } from '@react-navigation/native';
 
-const RegisterScreen = ({ navigation }) => {
+const RegisterScreen = () => {
+
+  const navigation = useNavigation();
+  const handleSignInBtnPress = () => {
+      navigation.navigate('Login');
+  };
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -169,6 +176,7 @@ const RegisterScreen = ({ navigation }) => {
 
           <SizedBox height={16} />
           <View style={styles.form}>
+          <Text style={styles.label}>User Type</Text>
             <View style={styles.selectContainer}>
               <RNPickerSelect
                 placeholder = { {label: 'Select role', value: null}}
@@ -177,6 +185,20 @@ const RegisterScreen = ({ navigation }) => {
                   { label: 'Member', value: 'member' },
                   { label: 'Admin', value: 'admin' },
                 ]}
+                style={{
+                  inputAndroid: {
+                    color: 'rgba(235, 235, 245, 0.6)',
+                    fontSize: 15,
+                    fontWeight: '400',
+                    lineHeight: 20,
+                  },
+                  inputIOS: {
+                    color: 'rgba(235, 235, 245, 0.6)',
+                    fontSize: 15,
+                    fontWeight: '400',
+                    lineHeight: 20,
+                  },
+                }}
               />
             </View>
          </View>
@@ -188,6 +210,13 @@ const RegisterScreen = ({ navigation }) => {
               <Text style={styles.buttonTitle}>Sign Up</Text>
             </View>
           </TouchableOpacity>
+
+          <SizedBox height={16} />
+
+          <View style={styles.extraContentContainer}>
+            <Text style={styles.textButton}>Already have an account? <Text style={styles.signupbtn} onPress={handleSignInBtnPress}>Sign In</Text> </Text>
+          </View>
+
         </KeyboardAvoidingView>
       </SafeAreaView>
     </View>

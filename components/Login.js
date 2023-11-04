@@ -14,8 +14,16 @@ import {
 import { styles } from './Styles'; 
 import SizedBox from './SizedBox';
 import { Controller, useForm } from '../node_modules/react-hook-form';
+import { useNavigation } from '@react-navigation/native';
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = () => {
+
+  const navigation = useNavigation();
+
+  const handleSignUpBtnPress = () => {
+      navigation.navigate('Register');
+  };
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -114,8 +122,8 @@ const LoginScreen = ({ navigation }) => {
 
           <SizedBox height={16} />
 
-          <View style={styles.forgotPasswordContainer}>
-            <Text style={styles.textButton}>Forgot password?</Text>
+          <View style={styles.extraContentContainer}>
+            <Text style={styles.textButton}>Create an account? <Text style={styles.signupbtn} onPress={handleSignUpBtnPress}>Sign Up</Text> </Text>
           </View>
 
           <SizedBox height={16} />
