@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList, StyleSheet, Image } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, StyleSheet, Image, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import EditUser from './EditUser';
 
-const UserManagement = () => {
+const UserManagement = ({navigation}) => {
+
   // Dummy user data for demonstration
   const [users, setUsers] = useState([
     { id: 1, name: 'John Doe', email: 'john.doe@example.com', rate: 4.5 },
@@ -10,14 +12,28 @@ const UserManagement = () => {
     // Add more user objects as needed
   ]);
 
-  const handleEdit = (userId) => {
-    // Implement edit functionality here
-    console.log(`Edit user with ID ${userId}`);
+  const handleEdit = (user) => {
+    // Navigate to EditUser component with user data
+    navigation.navigate('EditUser', { user });
   };
 
-  const handleDelete = (userId) => {
-    // Implement delete functionality here
-    setUsers(users.filter(user => user.id !== userId));
+  const handleDelete = (userItem) => {
+    Alert.alert(
+      'Confirm Deletion',
+      `Are you sure you want to remove ${userItem.name}?`,
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          onPress: () => setUsers(users.filter(user => user.id !== userItem.id)),
+          style: 'destructive',
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   const renderItem = ({ item }) => (
@@ -33,10 +49,10 @@ const UserManagement = () => {
         <Text style={styles.info}>Email: {item.email}</Text>
         <Text style={styles.info}>Rate: {item.rate}</Text>
         <View style={styles.actions}>
-          <TouchableOpacity onPress={() => handleEdit(item.id)}>
+          <TouchableOpacity onPress={() => handleEdit(item)}>
             <Ionicons name="create-outline" size={20} color="#5D5FDE" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleDelete(item.id)}>
+          <TouchableOpacity onPress={() => handleDelete(item)}>
             <Ionicons name="trash-outline" size={20} color="red" />
           </TouchableOpacity>
         </View>

@@ -9,6 +9,7 @@ import ProjectOverview from './components/Admin/ProjectOverview';
 import TaskManagement from './components/Admin/TaskManagement';
 import UserManagement from './components/Admin/UserManagement';
 import Profile from './components/Admin/Profile';
+import EditUser from './components/Admin/EditUser';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -40,9 +41,9 @@ const TabNavigator = () => {
         tabBarInactiveTintColor: 'black',
       })}
     >
-      <Tab.Screen name="ProjectOverview" component={ProjectOverview} />
-      <Tab.Screen name="UserManagement" component={UserManagement} />
-      <Tab.Screen name="TaskManagement" component={TaskManagement} />
+      <Tab.Screen name="ProjectOverview" component={ProjectOverview} options={{ title: 'Project Overview' }} />
+      <Tab.Screen name="UserManagement" component={UserManagement} options={{ title: 'User Management' }} />
+      <Tab.Screen name="TaskManagement" component={TaskManagement} options={{ title: 'Task Management' }} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
@@ -67,6 +68,10 @@ const Navigation = () => {
           component={TabNavigator}
           options={{ headerShown: false }}
         />
+        <Stack.Screen 
+        name="EditUser" 
+        component={EditUser}
+        options={{ headerShown: false  }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
