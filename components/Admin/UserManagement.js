@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList, StyleSheet, Image, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, StyleSheet, Image, Alert, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import EditUser from './EditUser';
 
 const UserManagement = ({navigation}) => {
 
-  // Dummy user data for demonstration
+  const [searchQuery, setSearchQuery] = useState('');
+
   const [users, setUsers] = useState([
     { id: 1, name: 'John Doe', email: 'john.doe@example.com', rate: 4.5 },
     { id: 2, name: 'Jane Smith', email: 'jane.smith@example.com', rate: 3.8 },
-    // Add more user objects as needed
   ]);
+
+  const filteredUsers = users.filter(user => 
+    user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    user.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleEdit = (user) => {
     // Navigate to EditUser component with user data
@@ -62,11 +67,23 @@ const UserManagement = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={users}
+        <TextInput
+        style={styles.searchInput}
+        placeholder="Search Users"
+        value={searchQuery}
+        onChangeText={text => setSearchQuery(text)}
+        />
+        <Ionicons 
+        name="search-outline" 
+        size={24} 
+        color="#d3d3d3" 
+        style={styles.searchIcon} 
+        />
+        <FlatList
+        data={filteredUsers}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
-      />
+        />
     </View>
   );
 };
@@ -115,6 +132,18 @@ const styles = StyleSheet.create({
     marginTop: 5,
     justifyContent: 'flex-end'
   },
+  searchInput: {
+    height: 40,
+    backgroundColor: 'white',
+    marginBottom: 10,
+    paddingLeft: 10,
+    borderRadius: 8
+  },
+  searchIcon: {
+    position: 'absolute',
+    top: 20,
+    right: 20
+  }
 });
 
 export default UserManagement;
