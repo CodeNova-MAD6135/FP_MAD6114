@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, FlatList, StyleSheet, Alert, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 
 const TaskManagement = ({ navigation }) => {
 
@@ -139,6 +140,9 @@ const TaskManagement = ({ navigation }) => {
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}
       />
+       <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('AddProject')}>
+        <Feather name="plus" size={24} color="white" />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -214,6 +218,26 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingBottom: 10,
     color: '#FFF',
+  },
+  addButton: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    backgroundColor: '#5D5FDE',
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+
+    elevation: 2,
   },
 
   

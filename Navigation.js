@@ -10,6 +10,7 @@ import TaskManagement from './components/Admin/TaskManagement';
 import UserManagement from './components/Admin/UserManagement';
 import Profile from './components/Admin/Profile';
 import EditUser from './components/Admin/EditUser';
+import AddProject from './components/Admin/AddProject';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -71,7 +72,13 @@ const Navigation = () => {
         <Stack.Screen 
         name="EditUser" 
         component={EditUser}
-        options={{ headerShown: false  }} />
+        options={{ headerShown: false  }} 
+        />
+        <Stack.Screen 
+        name="AddProject"
+        component={AddProject} 
+        options={{ title: 'Add Project' }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
