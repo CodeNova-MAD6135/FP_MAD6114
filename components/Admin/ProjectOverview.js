@@ -13,7 +13,6 @@ const ProjectOverview = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Project Overview</Text>
       <FlatList
         data={projects}
         keyExtractor={(item) => item.id.toString()}
@@ -33,11 +32,6 @@ const ProjectOverview = () => {
       flex: 1,
       padding: 16,
       marginTop: 40,
-    },
-    header: {
-      fontSize: 24,
-      fontWeight: 'bold',
-      marginBottom: 16,
     },
     card: {
       borderRadius: 8,

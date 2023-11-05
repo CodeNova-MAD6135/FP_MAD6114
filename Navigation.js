@@ -18,6 +18,9 @@ const TabNavigator = () => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarLabel: () => null,
+        tabBarStyle: {
+          padding: 20,
+        },
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
@@ -33,8 +36,8 @@ const TabNavigator = () => {
 
           return <Ionicons name={iconName} size={30} color={color} />;
         },
-        tabBarActiveTintColor: 'rgb(93, 95, 222)',
-        tabBarInactiveTintColor: 'grey',
+        tabBarActiveTintColor: '#5D5FDE',
+        tabBarInactiveTintColor: 'black',
       })}
     >
       <Tab.Screen name="ProjectOverview" component={ProjectOverview} />

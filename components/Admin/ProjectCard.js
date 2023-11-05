@@ -17,18 +17,16 @@ const ProjectCard = ({ name, status, progress }) => {
 
   const styles = StyleSheet.create({
     card: {
-      backgroundColor: '#f0f0f0',
-      borderRadius: 8,
-      padding: 16,
-      marginBottom: 16,
+      padding: 10,
+      marginBottom: 10,
+      backgroundColor: 'white',
+      borderRadius: 5,
       shadowColor: '#000',
       shadowOffset: {
-        width: 0,
-        height: 2,
+      width: 2,
+      height: 1,
       },
-      shadowOpacity: 0.2,
-      shadowRadius: 3,
-      elevation: 4,
+      shadowOpacity: 0.1
     },
     cardTitle: {
       fontSize: 16,
