@@ -15,11 +15,8 @@ import RNPickerSelect from 'react-native-picker-select';
 import { styles } from './Styles'; 
 import SizedBox from './SizedBox';
 import { Controller, useForm } from '../node_modules/react-hook-form';
-import { useNavigation } from '@react-navigation/native';
 
-const RegisterScreen = () => {
-
-  const navigation = useNavigation();
+const RegisterScreen = ({navigation}) => {
   const handleSignInBtnPress = () => {
       navigation.navigate('Login');
   };

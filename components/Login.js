@@ -14,11 +14,8 @@ import {
 import { styles } from './Styles'; 
 import SizedBox from './SizedBox';
 import { Controller, useForm } from '../node_modules/react-hook-form';
-import { useNavigation } from '@react-navigation/native';
 
-const LoginScreen = () => {
-
-  const navigation = useNavigation();
+const LoginScreen = ({navigation}) => {
 
   const handleSignUpBtnPress = () => {
       navigation.navigate('Register');

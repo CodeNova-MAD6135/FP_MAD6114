@@ -11,7 +11,7 @@ const Profile = ({ navigation }) => {
   };
 
   const handleLogout = () => {
-    // Handle logout logic here
+    navigation.navigate('Login');
   };
 
   return (
