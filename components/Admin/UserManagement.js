@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, FlatList, StyleSheet, Image, Alert, TextInput} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Swipeable } from 'react-native-gesture-handler';
+import Animated, { Easing } from 'react-native-reanimated';
 
 const UserManagement = ({navigation}) => {
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [swipedIndex, setSwipedIndex] = useState(null);
+  const openedRow = useRef();
 
   const [users, setUsers] = useState([
     { id: 1, name: 'John Doe', email: 'john.doe@example.com', rate: 4.5 },
@@ -18,7 +19,7 @@ const UserManagement = ({navigation}) => {
     user.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleEdit = (user) => {
+  const handleEdit = (user ) => {
     // Navigate to EditUser component with user data
     navigation.navigate('EditUser', { user });
   };
@@ -42,32 +43,25 @@ const UserManagement = ({navigation}) => {
     );
   };
 
-  const handleSwipe = (index) => {
-    if (swipedIndex !== null && swipedIndex !== index) {
-      // Unswipe the previously swiped item
-      setSwipedIndex(null);
-    }
-    setSwipedIndex(index);
-  };
-
   const renderItem = ({ item, index }) => (
     <Swipeable
-      renderRightActions={() => (
+      renderRightActions={( _, __, swipeable) => (
         <View style={styles.userSwipeItem}>
-          <TouchableOpacity onPress={() => handleEdit(item)}>
-            <Ionicons name="create" size={24} color="#007BFF" />
+          <TouchableOpacity onPress={() => [handleEdit(item ), swipeable.close()]}>
+            <View style={styles.editBtn}>
+            <Text style={styles.btnText}>Edit</Text>
+            </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleDelete(item)} >
-            <Ionicons name="trash" size={24} color="#FF4500" />
+          <TouchableOpacity onPress={() => [handleDelete(item), swipeable.close()]} >
+            <View style={styles.deleteBtn}>
+            <Text style={styles.btnText}>Delete</Text>
+            </View>
           </TouchableOpacity>
         </View>
       )}
-      onSwipeableOpen={() => handleSwipe(index)}
-      onSwipeableClose={() => {
-        if (swipedIndex === index) {
-          setSwipedIndex(null);
-        }
-      }}
+      onSwipeableWillOpen={() => openedRow.current?.close()}
+      onSwipeableOpen={(_, swipeable) => (openedRow.current = swipeable)}
+      friction={2}
     >
     <View style={styles.userItem}>
       <View style={styles.leftContent}>
@@ -115,10 +109,20 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   userSwipeItem: {
-    flexDirection: 'column',
-    justifyContent: 'space-around',
-    marginBottom: 10,
-
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  editBtn: {
+    backgroundColor: '#007BFF',
+    padding: 20,
+  },
+  deleteBtn: {
+    backgroundColor: '#FF4500',
+    padding: 20,
+  },
+  btnText:{
+    color: 'white',
+    fontWeight: 'bold'
   },
   userItem: {
     flexDirection: 'row',

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, TextInput } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
+import SwipeableList from 'react-native-swipeable-list';
 
 const ProjectDetail = ({ route, navigation }) => {
   const { projectId, projectName, projectDescription } = route.params;
@@ -29,6 +30,12 @@ const ProjectDetail = ({ route, navigation }) => {
       <Text style={styles.taskDescription}>{item.taskDescription}</Text>
     </View>
   );
+  const data = [
+    { id: 1, text: 'Item 1' },
+    { id: 2, text: 'Item 2' },
+    // Add more items as needed
+  ];
+  
 
   return (
     <View style={styles.container}>
