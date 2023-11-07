@@ -16,9 +16,14 @@ import { styles } from './Styles';
 import SizedBox from './SizedBox';
 import { Controller, useForm } from '../node_modules/react-hook-form';
 
+import Strings from '../assets/Strings';
+import Colors from '../assets/Colors';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+
 const RegisterScreen = ({navigation}) => {
   const handleSignInBtnPress = () => {
-      navigation.navigate('Login');
+      navigation.navigate(Strings.navLogin);
   };
 
   const [name, setName] = useState('');
@@ -26,6 +31,15 @@ const RegisterScreen = ({navigation}) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [role, setRole] = useState('');
+
+  const [isPasswordVisible, setPasswordVisibility] = useState(true);
+  const togglePasswordVisibility = () => {
+    setPasswordVisibility(!isPasswordVisible);
+  };
+  const [isConfirmPasswordVisible, setConfirmPasswordVisibility] = useState(true);
+  const toggleConfirmPasswordVisibility = () => {
+    setConfirmPasswordVisibility(!isConfirmPasswordVisible);
+  };
 
   const validateEmail = (email) => {
     // Regular expression to validate email format
@@ -58,15 +72,15 @@ const RegisterScreen = ({navigation}) => {
     const errors = [];
 
     if (!name) {
-        errors.push('Please enter a valid name');
+        errors.push(Strings.errorInvalidName);
       }
   
     if (!validateEmail(email)) {
-      errors.push('Please enter a valid email address');
+      errors.push(Strings.errorInvalidEmail);
     }
   
     if (!password) {
-      errors.push('Please enter a valid password');
+      errors.push(Strings.errorInvalidPassword);
     }
 
     // if (password !== confirmPassword) {
@@ -75,7 +89,7 @@ const RegisterScreen = ({navigation}) => {
     //   }
 
     if (!role) {
-        errors.push('Please select a role');
+        errors.push(Strings.errorRoleEmpty);
       }
   
     return errors;
@@ -90,13 +104,12 @@ const RegisterScreen = ({navigation}) => {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.content}
         >
-          <Text style={styles.title}>Creat an Account!</Text>
+          <Text style={styles.title}>{Strings.signupTitle}</Text>
 
           <SizedBox height={32} />
 
           <Pressable>
             <View style={styles.form}>
-              <Text style={styles.label}>Name</Text>
               <TextInput
                 autoCapitalize="none"
                 autoCompleteType="name"
@@ -106,6 +119,8 @@ const RegisterScreen = ({navigation}) => {
                 style={styles.textInput}
                 textContentType="name"
                 value={name}
+                placeholder={Strings.hintName}
+                placeholderTextColor={Colors.hintColor}
                 onChangeText={(text) => setName(text)}
               />
             </View>
@@ -115,8 +130,6 @@ const RegisterScreen = ({navigation}) => {
 
           <Pressable>
             <View style={styles.form}>
-              <Text style={styles.label}>Email</Text>
-
               <TextInput
                 autoCapitalize="none"
                 autoCompleteType="email"
@@ -126,6 +139,8 @@ const RegisterScreen = ({navigation}) => {
                 style={styles.textInput}
                 textContentType="username"
                 value={email}
+                placeholder={Strings.hintEmail}
+                placeholderTextColor={Colors.hintColor}
                 onChangeText={(text) => setEmail(text)}
               />
             </View>
@@ -135,19 +150,28 @@ const RegisterScreen = ({navigation}) => {
 
           <Pressable>
             <View style={styles.form}>
-              <Text style={styles.label}>Password</Text>
-
               <TextInput
                 autoCapitalize="none"
                 autoCompleteType="password"
                 autoCorrect={false}
                 returnKeyType="done"
-                secureTextEntry
+                secureTextEntry={isPasswordVisible}
                 style={styles.textInput}
                 textContentType="password"
                 value={password}
+                placeholder={Strings.hintPassword}
+                placeholderTextColor={Colors.hintColor}
                 onChangeText={(text) => setPassword(text)}
               />
+
+              <TouchableOpacity onPress={togglePasswordVisibility}>
+                <Icon
+                  name={isPasswordVisible ? 'eye-slash' : 'eye'}
+                  size={20}
+                  color={Colors.iconTintColor}
+                />
+              </TouchableOpacity>
+
             </View>
           </Pressable>
 
@@ -155,19 +179,27 @@ const RegisterScreen = ({navigation}) => {
 
           <Pressable>
             <View style={styles.form}>
-              <Text style={styles.label}>Confirm Password</Text>
-
               <TextInput
                 autoCapitalize="none"
                 autoCompleteType="password"
                 autoCorrect={false}
-                secureTextEntry
+                secureTextEntry={isConfirmPasswordVisible}
                 returnKeyType="done"
                 style={styles.textInput}
                 textContentType="password"
                 value={confirmPassword}
+                placeholder={Strings.hintConfirmPassword}
+                placeholderTextColor={Colors.hintColor}
                 onChangeText={(text) => setConfirmPassword(text)}
               />
+
+              <TouchableOpacity onPress={toggleConfirmPasswordVisibility}>
+                <Icon
+                  name={isConfirmPasswordVisible ? 'eye-slash' : 'eye'}
+                  size={20}
+                  color={Colors.iconTintColor}
+                />
+              </TouchableOpacity>
             </View>
           </Pressable>
 
@@ -176,7 +208,7 @@ const RegisterScreen = ({navigation}) => {
           <Text style={styles.label}>User Type</Text>
             <View style={styles.selectContainer}>
               <RNPickerSelect
-                placeholder = { {label: 'Select role', value: null}}
+                placeholder = { {label: Strings.hintChooseRole, value: null}}
                 onValueChange={(value) => console.log(value)}
                 items={[
                   { label: 'Member', value: 'member' },
@@ -204,14 +236,14 @@ const RegisterScreen = ({navigation}) => {
 
           <TouchableOpacity onPress={handleSubmit}>
             <View style={styles.button}>
-              <Text style={styles.buttonTitle}>Sign Up</Text>
+              <Text style={styles.buttonTitle}>{Strings.btnSignUp}</Text>
             </View>
           </TouchableOpacity>
 
           <SizedBox height={16} />
 
           <View style={styles.extraContentContainer}>
-            <Text style={styles.textButton}>Already have an account? <Text style={styles.signupbtn} onPress={handleSignInBtnPress}>Sign In</Text> </Text>
+            <Text style={styles.textButton}>{Strings.btnLoginPretext} <Text style={styles.signupbtn} onPress={handleSignInBtnPress}>{Strings.btnLogin}</Text> </Text>
           </View>
 
         </KeyboardAvoidingView>
