@@ -27,7 +27,7 @@ const TabNavigator = () => {
 
         tabBarLabel: () => null,
         tabBarStyle: {
-          padding: 20,
+          padding: 0,
         },
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;

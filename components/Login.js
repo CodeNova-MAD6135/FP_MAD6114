@@ -18,6 +18,9 @@ import { Controller, useForm } from '../node_modules/react-hook-form';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../assets/Colors';
 import Strings from '../assets/Strings';
+// import {
+//   findUserByEmailAndPassword
+// } from '../Realm';
 
 const LoginScreen = ({navigation}) => {
 
@@ -44,6 +47,15 @@ const LoginScreen = ({navigation}) => {
     navigation.navigate('TabNavigator', { screen: 'ProjectOverview' });
   
     const errors = validateForm();
+
+    // const user = findUserByEmailAndPassword(email,password)
+    // console.log(`Email: ${user}`)
+    // if(user === undefined){
+    //   Alert.alert('User not found', errors.join('\n'), [{ text: 'Ok' }]);
+    // }
+    // else{
+    //   navigation.navigate('TabNavigator', { screen: 'ProjectOverview' });
+    // }
   
     // if (errors.length === 0) {
     //   console.log(`Email: ${email}, Password: ${password}`);

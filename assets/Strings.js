@@ -11,6 +11,10 @@ const Strings = {
     errorInvalidName: 'Please enter a valid name',
     errorRoleEmpty: 'Please select a role',
 
+    errorEmailAlreadyExists: 'Email Already exists',
+
+    successRegister: 'User registered successfully',
+
     loginTitle: 'Welcome back!',
     loginSubTitle: 'Sign in to your account',
 
@@ -39,6 +43,11 @@ const Strings = {
     titleAddTask: 'Add New Task',
     titleAddProject: 'New Project',
     titleRegister: '',
+
+
+    schemaUser: 'User',
+    schemaProject: 'Project',
+    schemaTask: 'Task',
     
     
 }
