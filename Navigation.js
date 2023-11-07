@@ -14,6 +14,9 @@ import AddProject from './components/Admin/AddProject';
 import ProjectDetail from './components/Admin/ProjectDetail';
 import AddTask from './components/Admin/AddTask';
 
+import Strings from './assets/Strings';
+import Colors from './assets/Colors';
+
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -21,33 +24,34 @@ const TabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
+
         tabBarLabel: () => null,
         tabBarStyle: {
-          padding: 20,
+          padding: 0,
         },
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
-          if (route.name === 'ProjectOverview') {
+          if (route.name === Strings.navProjectOverview) {
             iconName = focused ? 'list-circle' : 'list-circle-outline';
-          } else if (route.name === 'UserManagement') {
+          } else if (route.name === Strings.navUserManagement) {
             iconName = focused ? 'people-circle' : 'people-circle-outline';
-          } else if (route.name === 'TaskManagement') {
+          } else if (route.name === Strings.navTaskManagement) {
             iconName = focused ? 'clipboard' : 'clipboard-outline';
-          } else if (route.name === 'Profile') {
+          } else if (route.name === Strings.navProfile) {
             iconName = focused ? 'person-circle' : 'person-circle-outline';
           }
 
           return <Ionicons name={iconName} size={30} color={color} />;
         },
-        tabBarActiveTintColor: '#5D5FDE',
-        tabBarInactiveTintColor: 'black',
+        tabBarActiveTintColor: Colors.tabBarActiveColor,
+        tabBarInactiveTintColor: Colors.tabBarInactiveColor,
       })}
     >
-      <Tab.Screen name="ProjectOverview" component={ProjectOverview} options={{ title: 'Project Overview' }} />
-      <Tab.Screen name="UserManagement" component={UserManagement} options={{ title: 'User Management' }} />
-      <Tab.Screen name="TaskManagement" component={TaskManagement} options={{ title: 'Task Management' }} />
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen name={Strings.navProjectOverview} component={ProjectOverview} options={{ title: Strings.titleProjectOverview }} />
+      <Tab.Screen name={Strings.navUserManagement} component={UserManagement} options={{ title: Strings.titleUserManagement }} />
+      <Tab.Screen name={Strings.navTaskManagement} component={TaskManagement} options={{ title: Strings.titleTaskManagement }} />
+      <Tab.Screen name={Strings.navProfile} component={Profile} />
     </Tab.Navigator>
   );
 };
@@ -57,14 +61,22 @@ const Navigation = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="Login"
+          name={Strings.navLogin}
           component={Login}
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Register"
+          name={Strings.navRegister}
           component={Register}
-          options={{ headerShown: false }}
+          options={{
+            title: Strings.titleRegister,
+            headerBackTitle: null,
+            headerStyle:{
+              backgroundColor: Colors.colorSurface,
+            },
+            headerTintColor: Colors.colorOnSurface,
+            headerShown: true
+          }}
         />
         <Stack.Screen
           name="TabNavigator"
@@ -72,7 +84,7 @@ const Navigation = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen 
-        name="EditUser" 
+        name={Strings.navEditUser} 
         component={EditUser}
         options={{
           title: '',
@@ -80,15 +92,15 @@ const Navigation = () => {
         }} 
         />
         <Stack.Screen 
-        name="AddProject"
+        name={Strings.navAddProject}
         component={AddProject} 
         options={{
-          title: 'New Project',
+          title: Strings.titleAddProject,
           headerBackTitle: null
         }} 
         />
         <Stack.Screen 
-        name="ProjectDetail"
+        name={Strings.navProjectDetail}
         component={ProjectDetail} 
         options={{
           title: '',
@@ -96,10 +108,10 @@ const Navigation = () => {
         }} 
         />
          <Stack.Screen 
-        name="AddTask"
+        name={Strings.navAddTask}
         component={AddTask} 
         options={{
-          title: 'Add New Task'
+          title: Strings.titleAddTask
         }} 
         />
       </Stack.Navigator>
