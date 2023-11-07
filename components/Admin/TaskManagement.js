@@ -93,6 +93,15 @@ const TaskManagement = ({ navigation }) => {
     );
   };
 
+  const handleProjectPress = (projectItem) => {
+    navigation.navigate('ProjectDetail', 
+    { 
+      projectId: projectItem.projectId,
+      projectName: projectItem.projectName,
+      projectDescription: projectItem.projectDescription
+    });
+  };
+
   const groupedProjects = [];
   for (let i = 0; i < filteredProjects.length; i += 2) {
     if (i + 1 < filteredProjects.length) {
@@ -105,10 +114,12 @@ const TaskManagement = ({ navigation }) => {
   const renderItem = ({ item }) => (
     <View style={styles.rowContainer}>
       {item.map(project => (
-          <View key={project.projectId} style={styles.folderContainer}>
+          <View key={project.projectId} style={styles.folderContainer} >
             <View style={styles.backCard}></View>
             <View style={styles.frontCard}>
+            <TouchableOpacity onPress={() => handleProjectPress(project)}>
               <Text style={styles.label}>{project.projectName}</Text>
+              </TouchableOpacity>
               <View style={styles.actions}>
                 <TouchableOpacity onPress={() => handleDelete(project)}>
                   <Ionicons name="trash" size={20} color="white" />
@@ -118,6 +129,7 @@ const TaskManagement = ({ navigation }) => {
         </View>
       ))}
     </View>
+    
   );
 
   return (
@@ -151,6 +163,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: 'white',
   },
   rightContent: {
     flex: 1,
@@ -174,7 +187,7 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     height: 40,
-    backgroundColor: 'white',
+    backgroundColor: '#f5f5f5',
     marginBottom: 10,
     paddingLeft: 10,
     borderRadius: 8
