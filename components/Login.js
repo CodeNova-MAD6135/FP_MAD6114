@@ -15,6 +15,10 @@ import { styles } from './Styles';
 import SizedBox from './SizedBox';
 import { Controller, useForm } from '../node_modules/react-hook-form';
 
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Colors from '../assets/Colors';
+import Strings from '../assets/Strings';
+
 const LoginScreen = ({navigation}) => {
 
   const handleSignUpBtnPress = () => {
@@ -23,6 +27,11 @@ const LoginScreen = ({navigation}) => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const [isPasswordVisible, setPasswordVisibility] = useState(false);
+  const togglePasswordVisibility = () => {
+    setPasswordVisibility(!isPasswordVisible);
+  };
 
   const validateEmail = (email) => {
     // Regular expression to validate email format
@@ -51,11 +60,11 @@ const LoginScreen = ({navigation}) => {
     const errors = [];
   
     if (!validateEmail(email)) {
-      errors.push('Please enter a valid email address');
+      errors.push(Strings.errorInvalidEmail);
     }
   
     if (!password) {
-      errors.push('Please enter a valid password');
+      errors.push(Strings.errorInvalidPassword);
     }
   
     return errors;
@@ -70,17 +79,16 @@ const LoginScreen = ({navigation}) => {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.content}
         >
-          <Text style={styles.title}>Welcome back!</Text>
+          <Text style={styles.title}>{Strings.loginTitle}</Text>
 
           <SizedBox height={8} />
 
-          <Text style={styles.subtitle}>Sign in to your account</Text>
+          <Text style={styles.subtitle}>{Strings.loginSubTitle}</Text>
 
           <SizedBox height={32} />
 
           <Pressable>
             <View style={styles.form}>
-              <Text style={styles.label}>Email</Text>
 
               <TextInput
                 autoCapitalize="none"
@@ -91,8 +99,11 @@ const LoginScreen = ({navigation}) => {
                 style={styles.textInput}
                 textContentType="username"
                 value={email}
+                placeholder={Strings.hintEmail}
                 onChangeText={(text) => setEmail(text)}
+                placeholderTextColor={Colors.hintColor}
               />
+
             </View>
           </Pressable>
 
@@ -100,33 +111,43 @@ const LoginScreen = ({navigation}) => {
 
           <Pressable>
             <View style={styles.form}>
-              <Text style={styles.label}>Password</Text>
 
               <TextInput
                 autoCapitalize="none"
                 autoCompleteType="password"
                 autoCorrect={false}
                 returnKeyType="done"
-                secureTextEntry
+                secureTextEntry={isPasswordVisible}
                 style={styles.textInput}
                 textContentType="password"
                 value={password}
+                placeholder={Strings.hintPassword}
+                placeholderTextColor={Colors.hintColor}
                 onChangeText={(text) => setPassword(text)}
               />
+
+              <TouchableOpacity onPress={togglePasswordVisibility}>
+                <Icon
+                  name={isPasswordVisible ? 'eye-slash' : 'eye'}
+                  size={20}
+                  color={Colors.iconTintColor}
+                />
+              </TouchableOpacity>
+              
             </View>
           </Pressable>
 
           <SizedBox height={16} />
 
           <View style={styles.extraContentContainer}>
-            <Text style={styles.textButton}>Create an account? <Text style={styles.signupbtn} onPress={handleSignUpBtnPress}>Sign Up</Text> </Text>
+            <Text style={styles.textButton}>{Strings.btnSingupPretext} <Text style={styles.signupbtn} onPress={handleSignUpBtnPress}>{Strings.btnSignUp}</Text> </Text>
           </View>
 
           <SizedBox height={16} />
 
           <TouchableOpacity onPress={handleSubmit}>
             <View style={styles.button}>
-              <Text style={styles.buttonTitle}>Continue</Text>
+              <Text style={styles.buttonTitle}>{Strings.btnContinue}</Text>
             </View>
           </TouchableOpacity>
         </KeyboardAvoidingView>

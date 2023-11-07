@@ -1,15 +1,17 @@
 import { StyleSheet } from 'react-native';
+import Colors from '../assets/Colors';
 
 export const styles =  StyleSheet.create({
   button: {
     alignItems: 'center',
-    backgroundColor: '#5D5FDE',
+    backgroundColor: Colors.buttonBgColor,
     borderRadius: 8,
     height: 48,
     justifyContent: 'center',
+    
   },
   buttonTitle: {
-    color: '#FFFFFF',
+    color: Colors.buttonTextColor,
     fontSize: 17,
     fontWeight: '600',
     lineHeight: 22,
@@ -25,7 +27,7 @@ export const styles =  StyleSheet.create({
   },
   form: {
     alignItems: 'center',
-    backgroundColor: 'rgb(58, 58, 60)',
+    backgroundColor: Colors.formBgColor,
     borderRadius: 8,
     flexDirection: 'row',
     height: 48,
@@ -39,36 +41,36 @@ export const styles =  StyleSheet.create({
     width: 150,
   },
   root: {
-    backgroundColor: '#000',
+    backgroundColor: Colors.colorSurface,
     flex: 1,
   },
   safeAreaView: {
     flex: 1,
   },
   subtitle: {
-    color: 'rgba(235, 235, 245, 0.6)',
+    color: Colors.textColorSecondary,
     fontSize: 17,
     fontWeight: '400',
     lineHeight: 22,
   },
   textButton: {
-    color: '#FFFFFF',
+    color: Colors.buttonTextColor,
     fontSize: 15,
     fontWeight: '400',
     lineHeight: 20,
   },
   textInput: {
-    color: '#FFFFFF',
+    color: Colors.textColorPrimary,
     flex: 1,
   },
   title: {
-    color: '#FFFFFF',
+    color: Colors.textColorPrimary,
     fontSize: 28,
     fontWeight: '700',
     lineHeight: 34,
   },
   error: {
-    color: 'red',
+    color: Colors.textColorError,
     fontSize: 12,
     marginTop: 5, 
   },
