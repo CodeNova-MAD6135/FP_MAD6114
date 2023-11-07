@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList, StyleSheet, Image, Alert, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, StyleSheet, Image, Alert, TextInput} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import EditUser from './EditUser';
+import { Swipeable } from 'react-native-gesture-handler';
 
 const UserManagement = ({navigation}) => {
 
   const [searchQuery, setSearchQuery] = useState('');
+  const [swipedIndex, setSwipedIndex] = useState(null);
 
   const [users, setUsers] = useState([
     { id: 1, name: 'John Doe', email: 'john.doe@example.com', rate: 4.5 },
@@ -41,7 +42,33 @@ const UserManagement = ({navigation}) => {
     );
   };
 
-  const renderItem = ({ item }) => (
+  const handleSwipe = (index) => {
+    if (swipedIndex !== null && swipedIndex !== index) {
+      // Unswipe the previously swiped item
+      setSwipedIndex(null);
+    }
+    setSwipedIndex(index);
+  };
+
+  const renderItem = ({ item, index }) => (
+    <Swipeable
+      renderRightActions={() => (
+        <View style={styles.userSwipeItem}>
+          <TouchableOpacity onPress={() => handleEdit(item)}>
+            <Ionicons name="create" size={24} color="#007BFF" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleDelete(item)} >
+            <Ionicons name="trash" size={24} color="#FF4500" />
+          </TouchableOpacity>
+        </View>
+      )}
+      onSwipeableOpen={() => handleSwipe(index)}
+      onSwipeableClose={() => {
+        if (swipedIndex === index) {
+          setSwipedIndex(null);
+        }
+      }}
+    >
     <View style={styles.userItem}>
       <View style={styles.leftContent}>
         <Image
@@ -53,16 +80,9 @@ const UserManagement = ({navigation}) => {
         <Text style={styles.name}>{item.name}</Text>
         <Text style={styles.info}>Email: {item.email}</Text>
         <Text style={styles.info}>Rate: {item.rate}</Text>
-        <View style={styles.actions}>
-          <TouchableOpacity onPress={() => handleEdit(item)}>
-            <Ionicons name="create-outline" size={20} color="#5D5FDE" />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleDelete(item)}>
-            <Ionicons name="trash-outline" size={20} color="red" />
-          </TouchableOpacity>
-        </View>
       </View>
     </View>
+    </Swipeable>
   );
 
   return (
@@ -92,19 +112,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: 'white',
+  },
+  userSwipeItem: {
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    marginBottom: 10,
+
   },
   userItem: {
     flexDirection: 'row',
     padding: 10,
     marginBottom: 10,
-    backgroundColor: 'white',
-    borderRadius: 5,
-    shadowColor: '#000',
-    shadowOffset: {
-    width: 2,
-    height: 1,
-    },
-    shadowOpacity: 0.1
+    borderBottomWidth: 1,
+    borderBottomColor: '#f3f3f3'
   },
   leftContent: {
     marginRight: 10,
@@ -134,16 +155,16 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     height: 40,
-    backgroundColor: 'white',
+    backgroundColor: '#f5f5f5',
     marginBottom: 10,
     paddingLeft: 10,
     borderRadius: 8
   },
   searchIcon: {
     position: 'absolute',
-    top: 20,
+    top: 22,
     right: 20
-  }
+  },
 });
 
 export default UserManagement;

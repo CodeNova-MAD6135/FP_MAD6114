@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
     padding: 16,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'white',
   },
   profileContainer: {
     alignItems: 'center',

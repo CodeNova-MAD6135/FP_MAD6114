@@ -31,8 +31,8 @@ const EditUser = ({ route, navigation }) => {
                     keyboardType="numeric"
                 />
             </View>
-            <TouchableOpacity onPress={handleSave}>
-                <Text style={styles.button}>Save</Text>
+            <TouchableOpacity style={styles.addButton} onPress={handleSave}>
+                <Text style={styles.buttonText}>Save</Text>
             </TouchableOpacity>
         </View>
     </View>
@@ -42,9 +42,7 @@ const EditUser = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-    borderRadius: 8,
-    marginTop: 80
+    backgroundColor: 'white',
   },
   userInfoContainer: {
     backgroundColor: 'white',
@@ -70,18 +68,20 @@ const styles = StyleSheet.create({
     height: 40,
     width: 100,
     padding: 10,
-    borderColor: '#d0d0d0',
+    borderColor: '#f3f3f3',
     borderWidth: 1,
     fontSize: 16,
   },
-  button: {
+  addButton: {
     backgroundColor: '#5D5FDE',
+    borderRadius: 8,
+    paddingVertical: 12,
+    alignItems: 'center',
+  },
+  buttonText: {
     color: 'white',
-    textAlign: 'center',
-    paddingVertical: 10,
-    borderRadius: 5,
+    fontWeight: 'bold',
     fontSize: 16,
-    width: '100%', // Set button width to 100%
   },
 });
 
