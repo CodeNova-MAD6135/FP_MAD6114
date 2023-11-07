@@ -24,6 +24,7 @@ const TabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
+
         tabBarLabel: () => null,
         tabBarStyle: {
           padding: 20,
@@ -67,7 +68,15 @@ const Navigation = () => {
         <Stack.Screen
           name={Strings.navRegister}
           component={Register}
-          options={{ headerShown: false }}
+          options={{
+            title: Strings.titleRegister,
+            headerBackTitle: null,
+            headerStyle:{
+              backgroundColor: Colors.colorSurface,
+            },
+            headerTintColor: Colors.colorOnSurface,
+            headerShown: true
+          }}
         />
         <Stack.Screen
           name="TabNavigator"

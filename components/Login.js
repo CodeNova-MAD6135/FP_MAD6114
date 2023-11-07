@@ -22,13 +22,13 @@ import Strings from '../assets/Strings';
 const LoginScreen = ({navigation}) => {
 
   const handleSignUpBtnPress = () => {
-      navigation.navigate('Register');
+      navigation.navigate(Strings.navRegister);
   };
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const [isPasswordVisible, setPasswordVisibility] = useState(false);
+  const [isPasswordVisible, setPasswordVisibility] = useState(true);
   const togglePasswordVisibility = () => {
     setPasswordVisibility(!isPasswordVisible);
   };

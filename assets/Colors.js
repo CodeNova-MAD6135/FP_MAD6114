@@ -13,7 +13,6 @@ const Colors={
 
     hintColor: '#aeaeae',
 
-
     buttonBgColor: '#5D5FDE',
     buttonTextColor: '#ffffff',
 

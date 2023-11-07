@@ -1,14 +1,23 @@
 const Strings = {
     hintEmail : 'Email',
     hintPassword: 'Password',
+    hintConfirmPassword: 'Confirm Password',
+    hintName: 'Name',
+    hintChooseRole: 'Select Role',
 
     errorInvalidEmail: 'Please enter a valid email address',
     errorInvalidPassword: 'Please enter a valid password',
+    errorPasswordDontMatch: 'Passwords do not match',
+    errorInvalidName: 'Please enter a valid name',
+    errorRoleEmpty: 'Please select a role',
 
     loginTitle: 'Welcome back!',
     loginSubTitle: 'Sign in to your account',
 
-    btnLogin: 'Log In',
+    signupTitle: 'Create an Account!',
+
+    btnLoginPretext: 'Already have an account?',
+    btnLogin: 'Sign In',
     btnSingupPretext: 'Create an account?',
     btnSignUp: 'Sign Up',
     btnContinue: 'Continue',
@@ -29,6 +38,8 @@ const Strings = {
     titleTaskManagement: 'Task Management',
     titleAddTask: 'Add New Task',
     titleAddProject: 'New Project',
+    titleRegister: '',
+    
     
 }
 
