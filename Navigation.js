@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 import Register from './components/Register';
 import Login from './components/Login';
 import ProjectOverview from './components/Admin/ProjectOverview';
@@ -33,24 +34,25 @@ const TabNavigator = () => {
           let iconName;
 
           if (route.name === Strings.navProjectOverview) {
-            iconName = focused ? 'list-circle' : 'list-circle-outline';
+            iconName = focused ? 'home' : 'home';
           } else if (route.name === Strings.navUserManagement) {
-            iconName = focused ? 'people-circle' : 'people-circle-outline';
+            iconName = focused ? 'users-cog' : 'users-cog';
           } else if (route.name === Strings.navTaskManagement) {
-            iconName = focused ? 'clipboard' : 'clipboard-outline';
+            iconName = focused ? 'list' : 'list';
           } else if (route.name === Strings.navProfile) {
-            iconName = focused ? 'person-circle' : 'person-circle-outline';
+            iconName = focused ? 'user-alt' : 'user-alt';
           }
 
-          return <Ionicons name={iconName} size={30} color={color} />;
+          // return <Ionicons name={iconName} size={30} color={color} />;
+          return <FontAwesome5 name={iconName} size={25} color={color} />;
         },
         tabBarActiveTintColor: Colors.tabBarActiveColor,
         tabBarInactiveTintColor: Colors.tabBarInactiveColor,
       })}
     >
       <Tab.Screen name={Strings.navProjectOverview} component={ProjectOverview} options={{ title: Strings.titleProjectOverview }} />
-      <Tab.Screen name={Strings.navUserManagement} component={UserManagement} options={{ title: Strings.titleUserManagement }} />
       <Tab.Screen name={Strings.navTaskManagement} component={TaskManagement} options={{ title: Strings.titleTaskManagement }} />
+      <Tab.Screen name={Strings.navUserManagement} component={UserManagement} options={{ title: Strings.titleUserManagement }} />
       <Tab.Screen name={Strings.navProfile} component={Profile} />
     </Tab.Navigator>
   );

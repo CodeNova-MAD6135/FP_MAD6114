@@ -2,15 +2,14 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, TextInput } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
-import SwipeableList from 'react-native-swipeable-list';
 
 const ProjectDetail = ({ route, navigation }) => {
   const { projectId, projectName, projectDescription } = route.params;
 
   const [searchQuery, setSearchQuery] = useState('');
   const [tasks, setTasks] = useState([
-    { taskId: 1, taskName: 'Task 1', taskDescription: 'Description for Task 1' },
-    { taskId: 2, taskName: 'Task 2', taskDescription: 'Description for Task 2' },
+    { taskId: 1, taskName: 'Task 1', taskDescription: 'Description for Task 1', taskStatus: 'In Progress', created_at: '02/11/23' },
+    { taskId: 2, taskName: 'Task 2', taskDescription: 'Description for Task 2', taskStatus: 'Completed', created_at: '02/11/23' }
     // Add more tasks as needed
   ]);
 
@@ -26,16 +25,22 @@ const ProjectDetail = ({ route, navigation }) => {
 
   const renderItem = ({ item }) => (
     <View style={styles.taskItem}>
-      <Text style={styles.taskName}>{item.taskName}</Text>
-      <Text style={styles.taskDescription}>{item.taskDescription}</Text>
+      <View style={styles.leftCol}>
+        <Ionicons name='folder-open-outline' size={24} color={'#d7d7d7'} />
+      </View>
+      <View style={styles.rightCol}>
+        <View style={styles.rcFirst}>
+        <Text style={styles.taskName}>{item.taskName}</Text>
+        <Text style={styles.taskDescription}>{item.taskDescription}</Text>
+        </View>
+        <View style={styles.rcLast}>
+        <Text style={styles.taskStatus}>{item.taskStatus}</Text>
+        <Text style={styles.taskDate}>{item.created_at}</Text>
+        </View>
+        
+      </View>
     </View>
   );
-  const data = [
-    { id: 1, text: 'Item 1' },
-    { id: 2, text: 'Item 2' },
-    // Add more items as needed
-  ];
-  
 
   return (
     <View style={styles.container}>
@@ -88,13 +93,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   projectName: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 10,
   },
   projectDescription: {
     color: 'gray',
-    fontSize: 16,
+    fontSize: 14,
     marginBottom: 20,
   },
   listWrap: {
@@ -112,10 +117,12 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
   },
   taskItem: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 10,
     padding: 5,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    width: '100%'
     
   },
   taskName: {
@@ -148,6 +155,15 @@ const styles = StyleSheet.create({
     top: 8,
     right: 5
   },
+  leftCol: {
+   marginRight: 10
+  },
+  rightCol: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent:'space-between',
+    width: '90%'
+  }
 });
 
 export default ProjectDetail;

@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, FlatList, StyleSheet, Image, Alert, TextInput} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Swipeable } from 'react-native-gesture-handler';
-import Animated, { Easing } from 'react-native-reanimated';
 
 const UserManagement = ({navigation}) => {
 
