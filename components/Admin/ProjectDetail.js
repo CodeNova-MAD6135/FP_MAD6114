@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 const ProjectDetail = ({ route, navigation }) => {
   const { projectId, projectName, projectDescription } = route.params;
+  
 
   const [searchQuery, setSearchQuery] = useState('');
   const [tasks, setTasks] = useState([

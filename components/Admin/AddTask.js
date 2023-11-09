@@ -1,13 +1,28 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import * as DocumentPicker from 'expo-document-picker';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 const AddTask = ({ navigation }) => {
   const [TaskName, setTaskName] = useState('');
   const [TaskDescription, setTaskDescription] = useState('');
+  const [AttachedDocument, setAttachedDocument] = useState(null);
 
   const handleAddTask = () => {
     // Handle adding the Task (e.g., save to state or API)
     // You can implement this part as needed
+  };
+
+  const handlePickDocument = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({ type: '*/*' });
+      console.log(result.assets[0].name);
+      if (result.assets[0]) {
+        setAttachedDocument(result.assets[0]);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -26,6 +41,18 @@ const AddTask = ({ navigation }) => {
               value={TaskDescription}
               onChangeText={text => setTaskDescription(text)}
           />
+          <TouchableOpacity style={styles.attachButton} onPress={handlePickDocument}>
+            {AttachedDocument ? (
+              <Text>Attachment: {AttachedDocument.name}</Text>
+            ) : (
+              <View style={styles.plusIconWrapper}>
+                <FontAwesome5 name='plus-circle' size={25} color='#5D5FDE' />
+                <Text style={styles.attachmentText}>
+                Attachment(s)
+                </Text>
+              </View>
+            )}
+          </TouchableOpacity>
           <TouchableOpacity style={styles.addButton} onPress={handleAddTask}>
               <Text style={styles.buttonText}>Add Task</Text>
           </TouchableOpacity>
@@ -51,17 +78,45 @@ const styles = StyleSheet.create({
   inputArea: {
     height: 200,
   },
+  attachButton: {
+    backgroundColor: 'transparent',
+    borderRadius: 8,
+    paddingVertical: 40,
+    alignItems: 'center',
+    marginTop: 10,
+    borderWidth: 2,
+    borderStyle: 'dashed',
+    borderColor: '#5D5FDE',
+    position: 'relative',
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  plusIconWrapper: {
+    position: 'absolute',
+    top: '80%',
+    left: '50%',
+    transform: [{ translateX: -90 }, { translateY: 15 }],
+    backgroundColor: '#fff',
+    borderRadius: 50,
+    width: 200,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   addButton: {
     backgroundColor: '#5D5FDE',
     borderRadius: 8,
     paddingVertical: 12,
     alignItems: 'center',
+    marginTop: 50,
   },
-  buttonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
+  attachmentText: {
+    color: 'gray'
+  }
+
 });
 
 export default AddTask;
