@@ -19,6 +19,7 @@ import { Controller, useForm } from '../node_modules/react-hook-form';
 import Strings from '../assets/Strings';
 import Colors from '../assets/Colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { addUser } from '../data/Storage';
 
 
 const RegisterScreen = ({navigation}) => {
@@ -55,9 +56,20 @@ const RegisterScreen = ({navigation}) => {
     if (errors.length === 0) {
       // Add your login logic here
       console.log(`Email: ${email}, Password: ${password}`);
-    } else {
-      Alert.alert('Error', errors.join('\n'), [{ text: 'Ok' }]);
 
+      const response = await addUser(name,email,password,role)
+      if(response.status){
+        Alert.alert("Success", response.msg, [{ text: 'Ok' }]);
+        navigation.navigate('Login');
+      }
+      else{
+        Alert.alert("Failure", response.msg, [{ text: 'Ok' }]);
+      }
+
+    } 
+    else {
+      Alert.alert('Error', errors.join('\n'), [{ text: 'Ok' }]);
+      return
     }
     
     setName('');
@@ -83,14 +95,14 @@ const RegisterScreen = ({navigation}) => {
       errors.push(Strings.errorInvalidPassword);
     }
 
-    // if (password !== confirmPassword) {
-    //     errors.push('Passwords do not match');
-    //     return;
-    //   }
+    if (password !== confirmPassword) {
+        errors.push('Passwords do not match');
+        return;
+    }
 
     if (!role) {
         errors.push(Strings.errorRoleEmpty);
-      }
+    }
   
     return errors;
   };
@@ -209,7 +221,7 @@ const RegisterScreen = ({navigation}) => {
             <View style={styles.selectContainer}>
               <RNPickerSelect
                 placeholder = { {label: Strings.hintChooseRole, value: null}}
-                onValueChange={(value) => console.log(value)}
+                onValueChange={(value) => setRole(value)}
                 items={[
                   { label: 'Member', value: 'member' },
                   { label: 'Admin', value: 'admin' },
