@@ -2,6 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, TextInput } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import NewTasks from './NewTasks';
+import InProgressTasks from './InProgressTasks';
+import CompletedTasks from './CompletedTasks';
+
+const Tab = createMaterialTopTabNavigator();
 
 const TaskOverview = ({ route, navigation }) => {
   const { projectId } = route.params;
@@ -45,31 +51,15 @@ const TaskOverview = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.listWrap}>
-        <View style={styles.taskTitleWrap}>
-            <Text style={styles.taskTitle}>Task(s)</Text>
-        </View>
-        <View style={styles.searchBox}>
-            <TextInput
-            style={styles.searchInput}
-            placeholder="Search Tasks"
-            value={searchQuery}
-            onChangeText={text => setSearchQuery(text)}
-            />
-            <Ionicons 
-                name="search-outline" 
-                size={24} 
-                color="#d3d3d3" 
-                style={styles.searchIcon} 
-            />
-        </View>
-        <FlatList
-            data={filteredTasks}
-            keyExtractor={(item) => item.taskId.toString()}
-            renderItem={renderItem}
-            style={styles.taskList}
-        />
-      </View>
+      <Tab.Navigator 
+      screenOptions={({ route }) => ({
+        tabBarLabelStyle: { fontWeight: 'bold' },
+        tabBarIndicatorStyle: {backgroundColor: '#5D5FDE'}
+      })}>
+        <Tab.Screen name="New" component={NewTasks} initialParams={{ projectId }}/>
+        <Tab.Screen name="In Progress" component={InProgressTasks} initialParams={{ projectId }}/>
+        <Tab.Screen name="Completed" component={CompletedTasks} initialParams={{ projectId }}/>
+      </Tab.Navigator>
 
       <TouchableOpacity style={styles.addButton} onPress={handleAddTask}>
         <Feather name="plus" size={24} color="white" />
