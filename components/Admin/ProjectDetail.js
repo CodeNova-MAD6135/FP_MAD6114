@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, TextInput } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
+import { BarChart } from 'react-native-chart-kit';
 
 const ProjectDetail = ({ route, navigation }) => {
   const { projectId, projectName, projectDescription } = route.params;
@@ -14,70 +15,54 @@ const ProjectDetail = ({ route, navigation }) => {
     // Add more tasks as needed
   ]);
 
-  const filteredTasks= tasks.filter(task => 
-    task.taskName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    task.taskDescription.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const handleAddTask = () => {
-    // Navigate to AddTask screen with projectId as a parameter
-    navigation.navigate('AddTask', { projectId });
+  const countTasksByStatus = (status) => {
+    return tasks.filter(task => task.taskStatus === status).length;
   };
 
-  const renderItem = ({ item }) => (
-    <View style={styles.taskItem}>
-      <View style={styles.leftCol}>
-        <Ionicons name='folder-open-outline' size={24} color={'#d7d7d7'} />
-      </View>
-      <View style={styles.rightCol}>
-        <View style={styles.rcFirst}>
-        <Text style={styles.taskName}>{item.taskName}</Text>
-        <Text style={styles.taskDescription}>{item.taskDescription}</Text>
-        </View>
-        <View style={styles.rcLast}>
-        <Text style={styles.taskStatus}>{item.taskStatus}</Text>
-        <Text style={styles.taskDate}>{item.created_at}</Text>
-        </View>
-        
-      </View>
-    </View>
-  );
+  const newTasksCount = countTasksByStatus('New');
+  const inProgressTasksCount = countTasksByStatus('In Progress');
+  const completedTasksCount = countTasksByStatus('Completed');
 
   return (
     <View style={styles.container}>
       <View style={styles.projectWrap}>
         <Text style={styles.projectName}>{projectName}</Text>
         <Text style={styles.projectDescription}>{projectDescription}</Text>
+        <Text style={styles.createdAt}>Created On: 09/11/2023</Text>
       </View>
-      <View style={styles.listWrap}>
-        <View style={styles.taskTitleWrap}>
-            <Text style={styles.taskTitle}>Task(s)</Text>
-        </View>
-        <View style={styles.searchBox}>
-            <TextInput
-            style={styles.searchInput}
-            placeholder="Search Tasks"
-            value={searchQuery}
-            onChangeText={text => setSearchQuery(text)}
-            />
-            <Ionicons 
-                name="search-outline" 
-                size={24} 
-                color="#d3d3d3" 
-                style={styles.searchIcon} 
-            />
-        </View>
-        <FlatList
-            data={filteredTasks}
-            keyExtractor={(item) => item.taskId.toString()}
-            renderItem={renderItem}
-            style={styles.taskList}
+      <View style={styles.chartContainer}>
+      <Text style={styles.chartTitle}>Task(s) Overview</Text>
+        <BarChart
+          data={{
+            labels: ['New', 'In Progress', 'Completed'],
+            datasets: [
+              {
+                data: [newTasksCount, inProgressTasksCount, completedTasksCount]
+              }
+            ]
+          }}
+          width={300}
+          height={220}
+          yAxisLabel={'#'}
+          chartConfig={{
+            backgroundColor: '#fff',
+            backgroundGradientFrom: '#fff',
+            backgroundGradientTo: '#fff',
+            decimalPlaces: 0,
+            color: (opacity = 1) => `rgba(0, 0, 255, ${opacity})`,
+            style: {
+              borderRadius: 16,
+            },
+            propsForBackgroundLines: {
+              stroke: '#f0e6f6', // Lavender color
+            },
+          }}
         />
       </View>
-
-      <TouchableOpacity style={styles.addButton} onPress={handleAddTask}>
-        <Feather name="plus" size={24} color="white" />
+      <TouchableOpacity style={styles.viewAllTasks} onPress={() => navigation.navigate('TaskOverview', {projectId: projectId}) }>
+        <Text style={styles.viewText}>View All Tasks</Text>
       </TouchableOpacity>
+
     </View>
   );
 };
@@ -92,9 +77,13 @@ const styles = StyleSheet.create({
   projectWrap:{
     display: 'flex',
     alignItems: 'center',
+    marginTop: 20,
+    backgroundColor: '#f9f9f9',
+    minHeight: 200,
+    padding: 20
   },
   projectName: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
   },
@@ -102,69 +91,38 @@ const styles = StyleSheet.create({
     color: 'gray',
     fontSize: 14,
     marginBottom: 20,
+    textAlign: 'justify'
   },
-  listWrap: {
-    marginTop: 20,
-    padding: 10,
+  createdAt: {
+    fontSize: 10,
+    position: 'absolute',
+    right: 5,
+    bottom: 5,
+    color: 'grey'
   },
-  taskTitleWrap:{
-    borderBottomWidth: 1,
-    borderBottomColor: '#c7c7c7',
-    marginBottom: 10
+  chartContainer:{
+    marginTop: 40,
+    display: 'flex',
+    alignItems: 'center'
   },
-  taskTitle:{
+  chartTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    paddingBottom: 5,
-  },
-  taskItem: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
     marginBottom: 10,
-    padding: 5,
-    width: '100%'
-    
+    textAlign: 'center',
   },
-  taskName: {
-    fontWeight: 'bold',
-  },
-  taskDescription: {
-    color: 'gray',
-  },
-  addButton: {
-    position: 'absolute',
-    bottom: 20,
-    right: 20,
-    backgroundColor: '#5D5FDE',
-    borderRadius: 50,
-    width: 50,
-    height: 50,
+  viewAllTasks: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 5,
+    marginTop: 20, // Adjust the marginTop as needed
   },
-  searchInput: {
-    height: 40,
-    backgroundColor: '#f0f0f0',
-    marginBottom: 10,
-    paddingLeft: 10,
-    borderRadius: 8
-  },
-  searchIcon: {
-    position: 'absolute',
-    top: 8,
-    right: 5
-  },
-  leftCol: {
-   marginRight: 10
-  },
-  rightCol: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent:'space-between',
-    width: '90%'
+  viewText: {
+    fontSize: 16,
+    color: '#5D5FDE', // Adjust the color as needed
+    fontWeight: 'bold',
   }
+
 });
 
 export default ProjectDetail;
