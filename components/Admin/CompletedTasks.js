@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, FlatList, TextInput } from 'r
 import { Ionicons } from '@expo/vector-icons';
 import TaskCard from '../Common/TaskCard';
 
-const CompletedTasks = ({ projectId }) => {
+const CompletedTasks = ({ projectId, navigation }) => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [tasks, setTasks] = useState([
@@ -23,7 +23,7 @@ const CompletedTasks = ({ projectId }) => {
         <View style={styles.searchBox}>
             <TextInput
             style={styles.searchInput}
-            placeholder="Search In Progress Tasks"
+            placeholder="Search Completed Tasks"
             value={searchQuery}
             onChangeText={text => setSearchQuery(text)}
             />
@@ -37,7 +37,7 @@ const CompletedTasks = ({ projectId }) => {
         <FlatList
             data={filteredTasks}
             keyExtractor={(item) => item.taskId.toString()}
-            renderItem={({ item }) => <TaskCard task={item} />}
+            renderItem={({ item }) => <TaskCard task={item} navigation={navigation}/>}
             style={styles.taskList}
         />
       </View>

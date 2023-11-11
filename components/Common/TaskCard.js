@@ -1,10 +1,11 @@
 // TaskCard.js
 
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-const TaskCard = ({ task }) => {
+const TaskCard = ({ task, navigation }) => {
   return (
+    <TouchableOpacity onPress={() => navigation.navigate('TaskDetail')}>
     <View style={styles.taskItem}>
       <View style={styles.rightCol}>
         <View style={styles.rcFirst}>
@@ -16,6 +17,7 @@ const TaskCard = ({ task }) => {
         </View>
       </View>
     </View>
+    </TouchableOpacity>
   );
 };
 

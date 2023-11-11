@@ -14,6 +14,7 @@ import AddProject from './components/Admin/AddProject';
 import ProjectDetail from './components/Admin/ProjectDetail';
 import AddTask from './components/Admin/AddTask';
 import TaskOverview from './components/Admin/TaskOverview';
+import TaskDetail from './components/Common/TaskDetail';
 
 import Strings from './assets/Strings';
 import Colors from './assets/Colors';
@@ -152,11 +153,18 @@ const Navigation = () => {
           title: Strings.titleAddTask
         }} 
         />
-         <Stack.Screen 
+        <Stack.Screen 
         name='TaskOverview'
         component={TaskOverview} 
         options={{
           title: ''
+        }} 
+        />
+        <Stack.Screen 
+        name='TaskDetail'
+        component={TaskDetail} 
+        options={{
+          title: null
         }} 
         />
       </Stack.Navigator>
