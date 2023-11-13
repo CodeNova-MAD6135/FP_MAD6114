@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, TextInput } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { BarChart } from 'react-native-chart-kit';
+import { deleteProjectTask, getCurrentProjectDetails } from '../../data/Storage';
 
 const ProjectDetail = ({ route, navigation }) => {
   const { projectId, projectName, projectDescription } = route.params;
@@ -18,10 +19,57 @@ const ProjectDetail = ({ route, navigation }) => {
   const countTasksByStatus = (status) => {
     return tasks.filter(task => task.taskStatus === status).length;
   };
+  const filteredTasks= tasks.filter(task => 
+    task.taskName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    task.taskDescription.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const deleteTaskItem = async(projectId, taskId) => {
+    const response = await deleteProjectTask(projectId,taskId)
+    if(response.status){
+      Alert.alert("Success", response.msg, [{ text: 'Ok' }]);
+      setTasks(response.data)
+    }
+  }
+
+  useEffect( () => {
+
+    const loadTasks = async() => {
+      const data = await getCurrentProjectDetails(projectId)
+      if(data !== null){
+        setTasks(data.tasks)
+      }
+    }
+    loadTasks()
+
+  },[searchQuery])
 
   const newTasksCount = countTasksByStatus('New');
   const inProgressTasksCount = countTasksByStatus('In Progress');
   const completedTasksCount = countTasksByStatus('Completed');
+  const handleAddTask = () => {
+    // Navigate to AddTask screen with projectId as a parameter
+    navigation.navigate('AddTask', { projectId: projectId });
+  };
+
+  const renderItem = ({ item }) => (
+    <View style={styles.taskItem}>
+      <View style={styles.leftCol}>
+        <Ionicons name='folder-open-outline' size={24} color={'#d7d7d7'} />
+      </View>
+      <View style={styles.rightCol}>
+        <View style={styles.rcFirst}>
+        <Text style={styles.taskName}>{item.taskName}</Text>
+        <Text style={styles.taskDescription}>{item.taskDescription}</Text>
+        </View>
+        <View style={styles.rcLast}>
+        <Text style={styles.taskStatus}>{item.taskStatus}</Text>
+        <Text style={styles.taskDate}>{item.created_at}</Text>
+        </View>
+        
+      </View>
+    </View>
+  );
 
   return (
     <View style={styles.container}>

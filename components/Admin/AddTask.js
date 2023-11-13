@@ -1,18 +1,36 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, Alert, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import { FontAwesome5 } from '@expo/vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
+import { addProjectTask } from '../../data/Storage';
 
-const AddTask = ({ navigation }) => {
+const AddTask = ({ route, navigation }) => {
+
+  const { projectId } = route.params;
+
   const [TaskName, setTaskName] = useState('');
   const [TaskDescription, setTaskDescription] = useState('');
   const [AttachedDocument, setAttachedDocument] = useState(null);
   const [selectedMember, setSelectedMember] = useState('');
 
-  const handleAddTask = () => {
+  const handleAddTask = async() => {
     // Handle adding the Task (e.g., save to state or API)
     // You can implement this part as needed
+    const task = {
+      taskId: new Date().getTime(),
+      taskName: TaskName,
+      taskDescription: TaskDescription,
+      assignedMember: null,
+      attachedDocument: AttachedDocument,
+      status: "Pending"
+    } 
+    const added = await addProjectTask(projectId,task)
+    if(added){
+      Alert.alert("Success", "New Task Created", [{ text: 'Ok' }]);
+      navigation.goBack();
+    }
+
   };
 
   const handlePickDocument = async () => {
