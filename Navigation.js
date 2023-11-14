@@ -2,7 +2,6 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Register from './components/Register';
 import Login from './components/Login';
@@ -14,6 +13,8 @@ import EditUser from './components/Admin/EditUser';
 import AddProject from './components/Admin/AddProject';
 import ProjectDetail from './components/Admin/ProjectDetail';
 import AddTask from './components/Admin/AddTask';
+import TaskOverview from './components/Admin/TaskOverview';
+import TaskDetail from './components/Common/TaskDetail';
 
 import Strings from './assets/Strings';
 import Colors from './assets/Colors';
@@ -44,6 +45,42 @@ const TabNavigator = () => {
           }
 
           // return <Ionicons name={iconName} size={30} color={color} />;
+          return <FontAwesome5 name={iconName} size={25} color={color} />;
+        },
+        tabBarActiveTintColor: Colors.tabBarActiveColor,
+        tabBarInactiveTintColor: Colors.tabBarInactiveColor,
+      })}
+    >
+      <Tab.Screen name={Strings.navProjectOverview} component={ProjectOverview} options={{ title: Strings.titleProjectOverview }} />
+      <Tab.Screen name={Strings.navTaskManagement} component={TaskManagement} options={{ title: Strings.titleTaskManagement }} />
+      <Tab.Screen name={Strings.navUserManagement} component={UserManagement} options={{ title: Strings.titleUserManagement }} />
+      <Tab.Screen name={Strings.navProfile} component={Profile} />
+    </Tab.Navigator>
+  );
+};
+
+const TaskTabNavigator = () => {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+
+        tabBarLabel: () => null,
+        tabBarStyle: {
+          padding: 0,
+        },
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === Strings.navProjectOverview) {
+            iconName = focused ? 'home' : 'home';
+          } else if (route.name === Strings.navUserManagement) {
+            iconName = focused ? 'users-cog' : 'users-cog';
+          } else if (route.name === Strings.navTaskManagement) {
+            iconName = focused ? 'list' : 'list';
+          } else if (route.name === Strings.navProfile) {
+            iconName = focused ? 'user-alt' : 'user-alt';
+          }
+
           return <FontAwesome5 name={iconName} size={25} color={color} />;
         },
         tabBarActiveTintColor: Colors.tabBarActiveColor,
@@ -114,6 +151,20 @@ const Navigation = () => {
         component={AddTask} 
         options={{
           title: Strings.titleAddTask
+        }} 
+        />
+        <Stack.Screen 
+        name='TaskOverview'
+        component={TaskOverview} 
+        options={{
+          title: ''
+        }} 
+        />
+        <Stack.Screen 
+        name='TaskDetail'
+        component={TaskDetail} 
+        options={{
+          title: null
         }} 
         />
       </Stack.Navigator>

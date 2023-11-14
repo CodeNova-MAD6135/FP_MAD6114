@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import { FontAwesome5 } from '@expo/vector-icons';
+import RNPickerSelect from 'react-native-picker-select';
 
 const AddTask = ({ navigation }) => {
   const [TaskName, setTaskName] = useState('');
   const [TaskDescription, setTaskDescription] = useState('');
   const [AttachedDocument, setAttachedDocument] = useState(null);
+  const [selectedMember, setSelectedMember] = useState('');
 
   const handleAddTask = () => {
     // Handle adding the Task (e.g., save to state or API)
@@ -47,12 +49,37 @@ const AddTask = ({ navigation }) => {
             ) : (
               <View style={styles.plusIconWrapper}>
                 <FontAwesome5 name='plus-circle' size={25} color='#5D5FDE' />
-                <Text style={styles.attachmentText}>
-                Attachment(s)
-                </Text>
               </View>
             )}
           </TouchableOpacity>
+          <View style={styles.picker}>
+          <RNPickerSelect
+                placeholder = { {label: 'Select Member', value: null}}
+                onValueChange={(value) => console.log(value)}
+                items={[
+                  { label: 'Rahul', value: 'rahul' },
+                  { label: 'Riya', value: 'riya' },
+                ]}
+                style={{
+                  inputAndroid: {
+                    height: 40,
+                    marginTop: 20,
+                    paddingLeft: 10,
+                    borderRadius: 8,
+                    borderColor: '#ccc',
+                    borderWidth: 1,
+                  },
+                  inputIOS: {
+                    height: 40,
+                    marginTop: 20,
+                    paddingLeft: 10,
+                    borderRadius: 8,
+                    borderColor: '#ccc',
+                    borderWidth: 1,
+                  },
+                }}
+              />
+          </View>
           <TouchableOpacity style={styles.addButton} onPress={handleAddTask}>
               <Text style={styles.buttonText}>Add Task</Text>
           </TouchableOpacity>
@@ -113,9 +140,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 50,
   },
-  attachmentText: {
-    color: 'gray'
-  }
 
 });
 
