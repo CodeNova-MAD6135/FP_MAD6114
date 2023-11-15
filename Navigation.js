@@ -50,11 +50,22 @@ const TabNavigator = () => {
         tabBarActiveTintColor: Colors.tabBarActiveColor,
         tabBarInactiveTintColor: Colors.tabBarInactiveColor,
       })}
+      initialParams={{
+        userId : null
+      }} 
     >
-      <Tab.Screen name={Strings.navProjectOverview} component={ProjectOverview} options={{ title: Strings.titleProjectOverview }} />
-      <Tab.Screen name={Strings.navTaskManagement} component={TaskManagement} options={{ title: Strings.titleTaskManagement }} />
-      <Tab.Screen name={Strings.navUserManagement} component={UserManagement} options={{ title: Strings.titleUserManagement }} />
-      <Tab.Screen name={Strings.navProfile} component={Profile} />
+      <Tab.Screen name={Strings.navProjectOverview} component={ProjectOverview} options={{ title: Strings.titleProjectOverview }} initialParams={{
+          userId : null
+        }} />
+      <Tab.Screen name={Strings.navTaskManagement} component={TaskManagement} options={{ title: Strings.titleTaskManagement }} initialParams={{
+          userId : null
+        }} />
+      <Tab.Screen name={Strings.navUserManagement} component={UserManagement} options={{ title: Strings.titleUserManagement }} initialParams={{
+          userId : null
+        }} />
+      <Tab.Screen name={Strings.navProfile} component={Profile} initialParams={{
+          userId : null
+        }} />
     </Tab.Navigator>
   );
 };
@@ -121,6 +132,9 @@ const Navigation = () => {
           name="TabNavigator"
           component={TabNavigator}
           options={{ headerShown: false }}
+          initialParams={{
+            userId : null
+          }} 
         />
         <Stack.Screen 
         name={Strings.navEditUser} 
@@ -136,6 +150,9 @@ const Navigation = () => {
         options={{
           title: Strings.titleAddProject,
           headerBackTitle: null
+        }}
+        initialParams={{
+          userId : null
         }} 
         />
         <Stack.Screen 

@@ -1,16 +1,32 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
+import { addNewProject } from '../../data/Storage';
 import * as DocumentPicker from 'expo-document-picker';
 import { FontAwesome5 } from '@expo/vector-icons';
 
-const AddProject = ({ navigation }) => {
+const AddProject = ({ route,navigation }) => {
+  const {userId} = route.params;
   const [projectName, setProjectName] = useState('');
   const [projectDescription, setProjectDescription] = useState('');
   const [AttachedDocument, setAttachedDocument] = useState(null);
 
-  const handleAddProject = () => {
+  const handleAddProject = async() => {
     // Handle adding the project (e.g., save to state or API)
     // You can implement this part as needed
+    const project = {
+      projectId: new Date().getTime(),
+      adminId: userId,
+      projectName: projectName,
+      projectDescription: projectDescription,
+      tasks: [],
+      progress: 0,
+      status: 'In Progress'
+    }
+    const added = await addNewProject(project)
+    if(added){
+      Alert.alert("Success", "New Project Created", [{ text: 'Ok' }]);
+      navigation.goBack();
+    }
   };
 
   const handlePickDocument = async () => {

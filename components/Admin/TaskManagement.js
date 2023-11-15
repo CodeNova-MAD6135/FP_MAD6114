@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, FlatList, StyleSheet, Alert, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
+import { deleteProject, getMyProjectList, getProjectList, getCurrentUser } from '../../data/Storage';
 
 const TaskManagement = ({ navigation }) => {
 
+  // const {userId} = route.params;
+  const [userId,setUserId] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
   const [projects, setProjects] = useState([
@@ -15,7 +18,7 @@ const TaskManagement = ({ navigation }) => {
       adminId: 1, 
       createdAt: '2023-11-05',
       status: 'Active', 
-      task: { 
+      task: [{ 
         taskId: 1, 
         taskName: 'Task 1', 
         taskDescription: 'Task 1 Description',
@@ -25,7 +28,7 @@ const TaskManagement = ({ navigation }) => {
         startDate: '2023-11-05', 
         endDate: '2023-11-10', 
         completionHours: 12 
-      } 
+      }] 
     },
    
     { 
@@ -35,7 +38,7 @@ const TaskManagement = ({ navigation }) => {
       adminId: 2, 
       createdAt: '2023-11-06',
       status: 'Inactive', 
-      task: { 
+      task: [{ 
         taskId: 2, 
         taskName: 'Task 2', 
         taskDescription: 'Task 2 Description',
@@ -45,7 +48,7 @@ const TaskManagement = ({ navigation }) => {
         startDate: '2023-11-07', 
         endDate: '2023-11-12', 
         completionHours: 18 
-      } 
+      }] 
     },
 
     { 
@@ -55,7 +58,7 @@ const TaskManagement = ({ navigation }) => {
       adminId: 2, 
       createdAt: '2023-11-06',
       status: 'Inactive', 
-      task: { 
+      task: [{ 
         taskId: 2, 
         taskName: 'Task 2', 
         taskDescription: 'Task 2 Description',
@@ -65,14 +68,40 @@ const TaskManagement = ({ navigation }) => {
         startDate: '2023-11-07', 
         endDate: '2023-11-12', 
         completionHours: 18 
-      } 
+      }]
     },
   ]);
 
-  const filteredProjects = projects.filter(project => 
-    project.projectName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    project.projectDescription.toLowerCase().includes(searchQuery.toLowerCase())
+  const getUser = async() => {
+    const user = await getCurrentUser()
+    setUserId(user.id)
+  }
+
+  useEffect( () => {
+
+    getUser()
+
+    const loadProjects = async() => {
+      const projects = await getMyProjectList(userId)
+      console.log(projects)
+      setProjects(projects)
+    };
+
+    loadProjects();
+  },[userId,searchQuery])
+
+  const filteredProjects = projects.filter( (project) => 
+    project?.projectName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    project?.projectDescription?.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const deleteItem = async(id) => {
+    const response = await deleteProject(id)
+    if(response.status){
+      Alert.alert("Success", "Project Deleted", [{ text: 'Ok' }]);
+      setProjects(response.data)
+    }
+  }
 
   const handleDelete = (projectItem) => {
     Alert.alert(
@@ -85,7 +114,10 @@ const TaskManagement = ({ navigation }) => {
         },
         {
           text: 'Delete',
-          onPress: () => setProjects(projects.filter(project => project.projectId !== projectItem.projectId)),
+          onPress: () => {
+            // setProjects(projects.filter( (project) => project.projectId !== projectItem.projectId))
+            deleteItem(projectItem.projectId)
+          },
           style: 'destructive',
         },
       ],
@@ -96,6 +128,7 @@ const TaskManagement = ({ navigation }) => {
   const handleProjectPress = (projectItem) => {
     navigation.navigate('ProjectDetail', 
     { 
+      userId: userId,
       projectId: projectItem.projectId,
       projectName: projectItem.projectName,
       projectDescription: projectItem.projectDescription
@@ -152,7 +185,7 @@ const TaskManagement = ({ navigation }) => {
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}
       />
-       <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('AddProject')}>
+       <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('AddProject',{userId:userId})}>
         <Feather name="plus" size={24} color="white" />
       </TouchableOpacity>
     </View>

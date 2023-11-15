@@ -1,6 +1,8 @@
-import React, { useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, FlatList, StyleSheet, Image, Alert, TextInput, TouchableWithoutFeedback } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
 import { Ionicons } from '@expo/vector-icons';
+import { Swipeable } from 'react-native-gesture-handler';
+import { getUserList } from '../../data/Storage';
 
 const UserManagement = ({ navigation }) => {
 
@@ -43,6 +45,14 @@ const UserManagement = ({ navigation }) => {
       { cancelable: true }
     );
   };
+
+  useEffect( () => {
+    const loadUsers = async() => {
+      const data = await getUserList()
+      setUsers(data)
+    }
+    loadUsers()
+  },[searchQuery])
 
   const handleDelete = (user) => {
     Alert.alert(

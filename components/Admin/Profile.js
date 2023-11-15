@@ -1,23 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { getCurrentUser, logoutUser } from '../../data/Storage';
 
 const Profile = ({ navigation }) => {
+
   // Assuming user data is available
-  const user = {
+  const [user,setUser] = useState({
     name: 'John Doe',
     email: 'john.doe@example.com',
-    profileImage: require('../../assets/user.png'), // Replace with actual image source
-  };
+    profileImage: require('../../assets/user.png') // Replace with actual image source
+  })
 
-  const handleLogout = () => {
-    navigation.navigate('Login');
+  useEffect( () => {
+    const getUser = async() => {
+      const user = await getCurrentUser()
+      setUser(user)
+    }
+    getUser()
+  },[])
+
+  const handleLogout = async() => {
+
+    const status = await logoutUser()
+    if(status){
+      navigation.navigate('Login');
+    }
+    
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.profileContainer}>
-        <Image source={user.profileImage} style={styles.profileImage} />
+        <Image source={user.profileImage || require('../../assets/user.png')} style={styles.profileImage} />
         <Text style={styles.name}>{user.name}</Text>
         <Text style={styles.email}>{user.email}</Text>
       </View>

@@ -18,11 +18,24 @@ import { Controller, useForm } from '../node_modules/react-hook-form';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../assets/Colors';
 import Strings from '../assets/Strings';
+
+import Storage, { getUser, loginUser, setCurrentUser, getCurrentUser } from '../data/Storage';
+
 // import {
 //   findUserByEmailAndPassword
 // } from '../Realm';
 
 const LoginScreen = ({navigation}) => {
+
+  // const { show } = useToast
+
+  const getUser = async() => {
+    const user = await getCurrentUser()
+    if(user != null){
+      navigation.navigate('TabNavigator', { screen: 'ProjectOverview'});
+    }
+  }
+  getUser()
 
   const handleSignUpBtnPress = () => {
       navigation.navigate(Strings.navRegister);
@@ -44,9 +57,23 @@ const LoginScreen = ({navigation}) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    navigation.navigate('TabNavigator', { screen: 'ProjectOverview' });
-  
+
     const errors = validateForm();
+    if(errors.length !== 0){
+      Alert.alert("Alert", errors[0], [{ text: 'Ok' }]);
+      return
+    }
+
+    const response = await loginUser(email,password);
+    if(response.status){
+      await setCurrentUser(response.data)
+      navigation.navigate('TabNavigator', { screen: 'ProjectOverview'});
+    }
+    else{
+      Alert.alert("User not found", 'Credentials doesn\'t match.', [{ text: 'Ok' }]);
+    }
+    setEmail('')
+    setPassword('')
 
     // const user = findUserByEmailAndPassword(email,password)
     // console.log(`Email: ${user}`)

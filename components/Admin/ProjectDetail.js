@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, TextInput } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { BarChart } from 'react-native-chart-kit';
+import { deleteProjectTask, getCurrentProjectDetails } from '../../data/Storage';
 
 const ProjectDetail = ({ route, navigation }) => {
   const { projectId, projectName, projectDescription } = route.params;
@@ -10,18 +11,71 @@ const ProjectDetail = ({ route, navigation }) => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [tasks, setTasks] = useState([
-    { taskId: 1, taskName: 'Task 1', taskDescription: 'Description for Task 1', taskStatus: 'In Progress', created_at: '02/11/23' },
-    { taskId: 2, taskName: 'Task 2', taskDescription: 'Description for Task 2', taskStatus: 'Completed', created_at: '02/11/23' }
+    { taskId: 1, taskName: 'Task 1', taskDescription: 'Description for Task 1', status: 'In Progress', created_at: '02/11/23' },
+    { taskId: 2, taskName: 'Task 2', taskDescription: 'Description for Task 2', status: 'Completed', created_at: '02/11/23' }
     // Add more tasks as needed
   ]);
 
   const countTasksByStatus = (status) => {
-    return tasks.filter(task => task.taskStatus === status).length;
+    return tasks.filter(task => task.status === status).length;
+  };
+  const filteredTasks= tasks.filter(task => 
+    task.taskName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    task.taskDescription.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const deleteTaskItem = async(projectId, taskId) => {
+    const response = await deleteProjectTask(projectId,taskId)
+    if(response.status){
+      Alert.alert("Success", response.msg, [{ text: 'Ok' }]);
+      setTasks(response.data)
+    }
+  }
+
+  let newTasksCount = countTasksByStatus('Pending');
+  let inProgressTasksCount = countTasksByStatus('In Progress');
+  let completedTasksCount = countTasksByStatus('Completed');
+
+  useEffect( () => {
+
+    const loadTasks = async() => {
+      const data = await getCurrentProjectDetails(projectId)
+      if(data !== null){
+        setTasks(data.tasks)
+      }
+      newTasksCount = countTasksByStatus('Pending');
+      inProgressTasksCount = countTasksByStatus('In Progress');
+      completedTasksCount = countTasksByStatus('Completed');
+    }
+    loadTasks()
+
+  },[searchQuery])
+
+  // const newTasksCount = countTasksByStatus('New');
+  
+  const handleAddTask = () => {
+    // Navigate to AddTask screen with projectId as a parameter
+    navigation.navigate('AddTask', { projectId: projectId });
   };
 
-  const newTasksCount = countTasksByStatus('New');
-  const inProgressTasksCount = countTasksByStatus('In Progress');
-  const completedTasksCount = countTasksByStatus('Completed');
+  const renderItem = ({ item }) => (
+    <View style={styles.taskItem}>
+      <View style={styles.leftCol}>
+        <Ionicons name='folder-open-outline' size={24} color={'#d7d7d7'} />
+      </View>
+      <View style={styles.rightCol}>
+        <View style={styles.rcFirst}>
+        <Text style={styles.taskName}>{item.taskName}</Text>
+        <Text style={styles.taskDescription}>{item.taskDescription}</Text>
+        </View>
+        <View style={styles.rcLast}>
+        <Text style={styles.taskStatus}>{item.taskStatus}</Text>
+        <Text style={styles.taskDate}>{item.created_at}</Text>
+        </View>
+        
+      </View>
+    </View>
+  );
 
   return (
     <View style={styles.container}>

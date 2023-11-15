@@ -1,18 +1,56 @@
-import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Alert, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import { FontAwesome5 } from '@expo/vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
+import { addProjectTask, getUserList } from '../../data/Storage';
 
-const AddTask = ({ navigation }) => {
+const AddTask = ({ route, navigation }) => {
+
+  const { projectId } = route.params;
+
   const [TaskName, setTaskName] = useState('');
   const [TaskDescription, setTaskDescription] = useState('');
   const [AttachedDocument, setAttachedDocument] = useState(null);
   const [selectedMember, setSelectedMember] = useState('');
 
-  const handleAddTask = () => {
+  const [memberNames,setMemberNames] = useState([])
+
+  useEffect( () => {
+    const loadMembers = async() => {
+      let users = await getUserList()
+      let memberUsers = users.filter((u) => u.role === 'member')
+      if(memberUsers){
+        let names = []
+        memberUsers.map( (user,index) => {
+          names.push({
+            label: user.name,
+            value: user.id
+          })
+        });
+        setMemberNames(names)
+      }
+    }
+    loadMembers()
+  },[])
+
+  const handleAddTask = async() => {
     // Handle adding the Task (e.g., save to state or API)
     // You can implement this part as needed
+    const task = {
+      taskId: new Date().getTime(),
+      taskName: TaskName,
+      taskDescription: TaskDescription,
+      assignedMember: selectedMember,
+      attachedDocument: AttachedDocument,
+      status: "Pending"
+    } 
+    const added = await addProjectTask(projectId,task)
+    if(added){
+      Alert.alert("Success", "New Task Created", [{ text: 'Ok' }]);
+      navigation.goBack();
+    }
+
   };
 
   const handlePickDocument = async () => {
@@ -55,11 +93,17 @@ const AddTask = ({ navigation }) => {
           <View style={styles.picker}>
           <RNPickerSelect
                 placeholder = { {label: 'Select Member', value: null}}
-                onValueChange={(value) => console.log(value)}
-                items={[
-                  { label: 'Rahul', value: 'rahul' },
-                  { label: 'Riya', value: 'riya' },
-                ]}
+                onValueChange={(value,index) => {
+                  console.log(value)
+                  setSelectedMember(value)
+                }}
+                items={
+                //   [
+                //   { label: 'Rahul', value: 'rahul' },
+                //   { label: 'Riya', value: 'riya' },
+                // ]
+                memberNames
+              }
                 style={{
                   inputAndroid: {
                     height: 40,
