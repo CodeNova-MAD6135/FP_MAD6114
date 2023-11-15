@@ -43,7 +43,7 @@ const AddTask = ({ route, navigation }) => {
       taskDescription: TaskDescription,
       assignedMember: selectedMember,
       attachedDocument: AttachedDocument,
-      status: "Pending"
+      status: "New"
     } 
     const added = await addProjectTask(projectId,task)
     if(added){
