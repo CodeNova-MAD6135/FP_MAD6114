@@ -1,23 +1,74 @@
 // TaskCard.js
 
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Alert, } from 'react-native';
 
 const TaskCard = ({ task, navigation }) => {
+  const handleLongPress = () => {
+    // Display a menu or options for edit and delete
+    Alert.alert(
+      'Options',
+      'Choose an action',
+      [
+        {
+          text: 'Edit',
+          onPress: () => {
+            // Navigate or perform edit action
+            navigation.navigate('EditTask', { taskId: task.id });
+          },
+        },
+        {
+          text: 'Delete',
+          onPress: () => handleDelete(),
+          style: 'destructive',
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+
+  const handleRegularPress = () => {
+    // Handle regular tap
+    navigation.navigate('TaskDetail');
+  };
+
+  const handleDelete = () => {
+    Alert.alert(
+      'Confirm Deletion',
+      `Are you sure you want to remove this task?`,
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          // onPress: () => ,
+          style: 'destructive',
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+
   return (
-    <TouchableOpacity onPress={() => navigation.navigate('TaskDetail')}>
-    <View style={styles.taskItem}>
-      <View style={styles.rightCol}>
-        <View style={styles.rcFirst}>
-          <Text style={styles.taskName}>{task.taskName}</Text>
-          <Text style={styles.taskDescription}>{task.taskDescription}</Text>
+      <TouchableWithoutFeedback onLongPress={handleLongPress} onPress={handleRegularPress}>
+        <View style={styles.taskItem}>
+          <View style={styles.rightCol}>
+            <View style={styles.rcFirst}>
+              <Text style={styles.taskName}>{task.taskName}</Text>
+              <Text style={styles.taskDescription}>{task.taskDescription}</Text>
+            </View>
+            <View style={styles.rcLast}>
+              <Text style={styles.taskDate}>{task.created_at}</Text>
+            </View>
+          </View>
         </View>
-        <View style={styles.rcLast}>
-          <Text style={styles.taskDate}>{task.created_at}</Text>
-        </View>
-      </View>
-    </View>
-    </TouchableOpacity>
+      </TouchableWithoutFeedback>
   );
 };
 
