@@ -1,9 +1,8 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, FlatList, StyleSheet, Image, Alert, TextInput} from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, StyleSheet, Image, Alert, TextInput, TouchableWithoutFeedback } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Swipeable } from 'react-native-gesture-handler';
 
-const UserManagement = ({navigation}) => {
+const UserManagement = ({ navigation }) => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const openedRow = useRef();
@@ -13,20 +12,42 @@ const UserManagement = ({navigation}) => {
     { id: 2, name: 'Jane Smith', email: 'jane.smith@example.com', rate: 3.8 },
   ]);
 
-  const filteredUsers = users.filter(user => 
+  const filteredUsers = users.filter(user =>
     user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     user.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleEdit = (user ) => {
-    // Navigate to EditUser component with user data
-    navigation.navigate('EditUser', { user });
+  const handleLongPress = (user) => {
+    // Display a menu or options for edit and delete
+    Alert.alert(
+      'Options',
+      'Choose an action',
+      [
+        {
+          text: 'Edit',
+          onPress: () => {
+            // Navigate or perform edit action
+            navigation.navigate('EditUser', { user });
+          },
+        },
+        {
+          text: 'Delete',
+          onPress: () => handleDelete(user),
+          style: 'destructive',
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
-  const handleDelete = (userItem) => {
+  const handleDelete = (user) => {
     Alert.alert(
       'Confirm Deletion',
-      `Are you sure you want to remove ${userItem.name}?`,
+      `Are you sure you want to remove ${user.name}?`,
       [
         {
           text: 'Cancel',
@@ -34,7 +55,7 @@ const UserManagement = ({navigation}) => {
         },
         {
           text: 'Delete',
-          onPress: () => setUsers(users.filter(user => user.id !== userItem.id)),
+          onPress: () => setUsers(users.filter(u => u.id !== user.id)),
           style: 'destructive',
         },
       ],
@@ -42,61 +63,45 @@ const UserManagement = ({navigation}) => {
     );
   };
 
-  const renderItem = ({ item, index }) => (
-    <Swipeable
-      renderRightActions={( _, __, swipeable) => (
-        <View style={styles.userSwipeItem}>
-          <TouchableOpacity onPress={() => [handleEdit(item ), swipeable.close()]}>
-            <View style={styles.editBtn}>
-            <Text style={styles.btnText}>Edit</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => [handleDelete(item), swipeable.close()]} >
-            <View style={styles.deleteBtn}>
-            <Text style={styles.btnText}>Delete</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-      )}
-      onSwipeableWillOpen={() => openedRow.current?.close()}
-      onSwipeableOpen={(_, swipeable) => (openedRow.current = swipeable)}
-      friction={2}
+  const renderItem = ({ item }) => (
+    <TouchableWithoutFeedback
+      onLongPress={() => handleLongPress(item)}
     >
-    <View style={styles.userItem}>
-      <View style={styles.leftContent}>
-        <Image
-          source={require('../../assets/user.png')} // Path to your user image
-          style={styles.profileImage}
-        />
+      <View style={styles.userItem}>
+        <View style={styles.leftContent}>
+          <Image
+            source={require('../../assets/user.png')} // Path to your user image
+            style={styles.profileImage}
+          />
+        </View>
+        <View style={styles.rightContent}>
+          <Text style={styles.name}>{item.name}</Text>
+          <Text style={styles.info}>Email: {item.email}</Text>
+          <Text style={styles.info}>Rate: {item.rate}</Text>
+        </View>
       </View>
-      <View style={styles.rightContent}>
-        <Text style={styles.name}>{item.name}</Text>
-        <Text style={styles.info}>Email: {item.email}</Text>
-        <Text style={styles.info}>Rate: {item.rate}</Text>
-      </View>
-    </View>
-    </Swipeable>
+    </TouchableWithoutFeedback>
   );
 
   return (
     <View style={styles.container}>
-        <TextInput
+      <TextInput
         style={styles.searchInput}
         placeholder="Search Users"
         value={searchQuery}
         onChangeText={text => setSearchQuery(text)}
-        />
-        <Ionicons 
-        name="search-outline" 
-        size={24} 
-        color="#d3d3d3" 
-        style={styles.searchIcon} 
-        />
-        <FlatList
+      />
+      <Ionicons
+        name="search-outline"
+        size={24}
+        color="#d3d3d3"
+        style={styles.searchIcon}
+      />
+      <FlatList
         data={filteredUsers}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
-        />
+      />
     </View>
   );
 };
