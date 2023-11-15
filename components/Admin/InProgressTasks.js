@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import TaskCard from '../Common/TaskCard';
+import { getCurrentProjectDetails } from '../../data/Storage';
 
-const InProgressTasks = ({ projectId, navigation }) => {
+const InProgressTasks = ({ route, navigation }) => {
+
+  const { projectId } = route.params;
 
   const [searchQuery, setSearchQuery] = useState('');
   const [tasks, setTasks] = useState([
@@ -16,6 +19,16 @@ const InProgressTasks = ({ projectId, navigation }) => {
     task.taskName.toLowerCase().includes(searchQuery.toLowerCase()) ||
     task.taskDescription.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  useEffect( () => {
+    const loadTasks = async() => {
+      const data = await getCurrentProjectDetails(projectId)
+      if(data !== null){
+        setTasks(data.tasks.filter((t) => t.status === 'In Progress'))
+      }
+    }
+    loadTasks()
+  },[searchQuery])
 
   return (
     <View style={styles.container}>
