@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput} from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -31,7 +31,10 @@ const TaskDetail = ({ route }) => {
         <Text style={styles.taskName}>Task 1</Text>
         <Text style={styles.taskDescription}>ply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letrase</Text>
         <View style={styles.contentWrap}>
-        <Text style={styles.label}>Created Date:</Text><Text style={styles.value}>09/11/2023</Text>
+          <Text style={styles.label}>Created Date:</Text><Text style={styles.value}>09/11/2023</Text>
+        </View>
+        <View style={styles.contentWrap}>
+          <Text style={styles.label}>Assigned Member:</Text><Text style={styles.value}>Sonia</Text>
         </View>
         <View style={styles.memberTaskContent}>
           <View style={styles.contentWrap}>
@@ -64,9 +67,9 @@ const TaskDetail = ({ route }) => {
               keyboardType="numeric"
             />
           </View>
-        </View>
-        <View style={styles.contentWrap}>
-          <Text style={styles.label}>Assigned Member:</Text><Text style={styles.value}>Sonia</Text>
+          <TouchableOpacity style={styles.addButton}>
+              <Text style={styles.buttonText}>Update Task</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -141,7 +144,19 @@ const styles = StyleSheet.create({
   },
   memberTaskContent: {
     marginTop: 10
-  }
+  },
+  addButton: {
+    backgroundColor: '#5D5FDE',
+    borderRadius: 8,
+    paddingVertical: 12,
+    alignItems: 'center',
+    marginTop: 50,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
 });
 
 export default TaskDetail;
