@@ -4,6 +4,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { Swipeable } from 'react-native-gesture-handler';
 import { getUserList } from '../../data/Storage';
 
+import { getUserListOfType } from '../../data/Storage';
+
 const UserManagement = ({ navigation }) => {
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -48,7 +50,7 @@ const UserManagement = ({ navigation }) => {
 
   useEffect( () => {
     const loadUsers = async() => {
-      const data = await getUserList()
+      const data = await getUserListOfType('member')
       setUsers(data)
     }
     loadUsers()

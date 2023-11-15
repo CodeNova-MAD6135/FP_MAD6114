@@ -50,6 +50,16 @@ export const getUserList = async() => {
         return [];
     }
 };
+export const getUserListOfType = async(type) => {
+    try{
+        const users = await getUserList()
+        return users.filter((u) => u.role === type) || []
+    }
+    catch(error){
+        return [];
+    }
+}
+
 
 export const loginUser = async(email,pwd) => {
     try{
