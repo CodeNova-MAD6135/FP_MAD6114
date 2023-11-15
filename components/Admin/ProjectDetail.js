@@ -11,13 +11,13 @@ const ProjectDetail = ({ route, navigation }) => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [tasks, setTasks] = useState([
-    { taskId: 1, taskName: 'Task 1', taskDescription: 'Description for Task 1', taskStatus: 'In Progress', created_at: '02/11/23' },
-    { taskId: 2, taskName: 'Task 2', taskDescription: 'Description for Task 2', taskStatus: 'Completed', created_at: '02/11/23' }
+    { taskId: 1, taskName: 'Task 1', taskDescription: 'Description for Task 1', status: 'In Progress', created_at: '02/11/23' },
+    { taskId: 2, taskName: 'Task 2', taskDescription: 'Description for Task 2', status: 'Completed', created_at: '02/11/23' }
     // Add more tasks as needed
   ]);
 
   const countTasksByStatus = (status) => {
-    return tasks.filter(task => task.taskStatus === status).length;
+    return tasks.filter(task => task.status === status).length;
   };
   const filteredTasks= tasks.filter(task => 
     task.taskName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -32,6 +32,10 @@ const ProjectDetail = ({ route, navigation }) => {
     }
   }
 
+  let newTasksCount = countTasksByStatus('Pending');
+  let inProgressTasksCount = countTasksByStatus('In Progress');
+  let completedTasksCount = countTasksByStatus('Completed');
+
   useEffect( () => {
 
     const loadTasks = async() => {
@@ -39,14 +43,16 @@ const ProjectDetail = ({ route, navigation }) => {
       if(data !== null){
         setTasks(data.tasks)
       }
+      newTasksCount = countTasksByStatus('Pending');
+      inProgressTasksCount = countTasksByStatus('In Progress');
+      completedTasksCount = countTasksByStatus('Completed');
     }
     loadTasks()
 
   },[searchQuery])
 
-  const newTasksCount = countTasksByStatus('New');
-  const inProgressTasksCount = countTasksByStatus('In Progress');
-  const completedTasksCount = countTasksByStatus('Completed');
+  // const newTasksCount = countTasksByStatus('New');
+  
   const handleAddTask = () => {
     // Navigate to AddTask screen with projectId as a parameter
     navigation.navigate('AddTask', { projectId: projectId });
