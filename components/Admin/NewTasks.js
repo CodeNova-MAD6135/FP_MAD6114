@@ -2,8 +2,8 @@ import React, { useState ,useEffect} from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import TaskCard from '../Common/TaskCard';
-
 import { getCurrentProjectDetails } from '../../data/Storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 const NewTasks = ({ route, navigation }) => {
 
@@ -21,15 +21,23 @@ const NewTasks = ({ route, navigation }) => {
     task.taskDescription.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  useEffect( () => {
-    const loadTasks = async() => {
-      const data = await getCurrentProjectDetails(projectId)
-      if(data !== null){
-        setTasks(data.tasks.filter((t) => t.status === 'New'))
-      }
+  const loadTasks = async() => {
+    const data = await getCurrentProjectDetails(projectId)
+    if(data !== null){
+      setTasks(data.tasks.filter((t) => t.status === 'New'))
     }
-    loadTasks()
+  }
+
+  useEffect( () => {
+    loadTasks();
   },[searchQuery])
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // Load or refresh data here
+      loadTasks();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -51,7 +59,7 @@ const NewTasks = ({ route, navigation }) => {
         <FlatList
             data={filteredTasks}
             keyExtractor={(item) => item.taskId.toString()}
-            renderItem={({ item }) => <TaskCard task={item} navigation={navigation}/>}
+            renderItem={({ item }) => <TaskCard task={item} projectId={projectId} navigation={navigation} />}
             style={styles.taskList}
         />
       </View>

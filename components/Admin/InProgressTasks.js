@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, FlatList, TextInput } from 'r
 import { Ionicons } from '@expo/vector-icons';
 import TaskCard from '../Common/TaskCard';
 import { getCurrentProjectDetails } from '../../data/Storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 const InProgressTasks = ({ route, navigation }) => {
 
@@ -20,15 +21,23 @@ const InProgressTasks = ({ route, navigation }) => {
     task.taskDescription.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  useEffect( () => {
-    const loadTasks = async() => {
-      const data = await getCurrentProjectDetails(projectId)
-      if(data !== null){
-        setTasks(data.tasks.filter((t) => t.status === 'In Progress'))
-      }
+  const loadTasks = async() => {
+    const data = await getCurrentProjectDetails(projectId)
+    if(data !== null){
+      setTasks(data.tasks.filter((t) => t.status === 'In Progress'))
     }
-    loadTasks()
+  }
+
+  useEffect( () => {
+    loadTasks();
   },[searchQuery])
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // Load or refresh data here
+      loadTasks();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>

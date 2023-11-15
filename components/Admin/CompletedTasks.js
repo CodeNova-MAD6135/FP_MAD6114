@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import TaskCard from '../Common/TaskCard';
-
 import { getCurrentProjectDetails } from '../../data/Storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 const CompletedTasks = ({ route, navigation }) => {
 
@@ -21,15 +21,23 @@ const CompletedTasks = ({ route, navigation }) => {
     task.taskDescription.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  useEffect( () => {
-    const loadTasks = async() => {
-      const data = await getCurrentProjectDetails(projectId)
-      if(data !== null){
-        setTasks(data.tasks.filter((t) => t.status === 'Completed'))
-      }
+  const loadTasks = async() => {
+    const data = await getCurrentProjectDetails(projectId)
+    if(data !== null){
+      setTasks(data.tasks.filter((t) => t.status === 'Completed'))
     }
+  }
+
+  useEffect( () => {
     loadTasks()
   },[searchQuery])
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // Load or refresh data here
+      loadTasks();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
