@@ -15,6 +15,17 @@ const TaskDetail = ({ route,navigation }) => {
   const [endTaskDate, setEndTaskDate] = useState(new Date());
   const [completionHours, setCompletionHours] = useState('');
 
+  const [progress,setProgress] = useState(0);
+  const [progressColor,setColor] = useState('');
+  let status = 'In Progress';
+  // if (status === 'Completed') {
+  //   progress = 100;
+  //   progressColor = '#4CAF50';
+  // } else if (status === 'In Progress') {
+  //   progress = 50;
+  //   progressColor = '#5D5FDE';
+  // }
+
   const loadProject = async() => {
     console.log('taskID:' +taskID+" and projectID:"+projectID)
     const project = await getCurrentProjectDetails(projectID)
@@ -23,11 +34,14 @@ const TaskDetail = ({ route,navigation }) => {
     setTask(currentTask)
 
     if (currentTask.status === 'Completed') {
-      progress = 100;
-      progressColor = '#4CAF50';
+      setProgress(100) ;
+      setColor('#4CAF50');
     } else if (status === 'In Progress') {
-      progress = 50;
-      progressColor = '#5D5FDE';
+      setProgress(50)
+      setColor('#5D5FDE');
+    }
+    else{
+      setProgress(0)
     }
     
     setStartTaskDate( (currentTask.startDate) ? new Date(currentTask.startDate) : new Date())
@@ -53,16 +67,7 @@ const TaskDetail = ({ route,navigation }) => {
     loadProject()
   },[])
 
-  let progress = 0;
-  let progressColor = '';
-  let status = 'In Progress';
-  if (status === 'Completed') {
-    progress = 100;
-    progressColor = '#4CAF50';
-  } else if (status === 'In Progress') {
-    progress = 50;
-    progressColor = '#5D5FDE';
-  }
+  
 
   return (
     <View style={styles.container}>
