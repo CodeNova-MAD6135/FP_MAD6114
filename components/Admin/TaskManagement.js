@@ -31,7 +31,7 @@ const TaskManagement = ({ navigation }) => {
 
   useFocusEffect(
     React.useCallback(() => {
-      // getUser();
+      getUser();
       loadProjects();
     }, [])
   );
