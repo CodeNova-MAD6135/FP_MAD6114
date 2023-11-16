@@ -4,6 +4,7 @@ import { Feather } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { BarChart } from 'react-native-chart-kit';
 import { deleteProjectTask, getCurrentProjectDetails } from '../../data/Storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 const ProjectDetail = ({ route, navigation }) => {
   const { projectId, projectName, projectDescription } = route.params;
@@ -36,20 +37,25 @@ const ProjectDetail = ({ route, navigation }) => {
   let inProgressTasksCount = countTasksByStatus('In Progress');
   let completedTasksCount = countTasksByStatus('Completed');
 
-  useEffect( () => {
-
-    const loadTasks = async() => {
-      const data = await getCurrentProjectDetails(projectId)
-      if(data !== null){
-        setTasks(data.tasks)
-      }
-      newTasksCount = countTasksByStatus('Pending');
-      inProgressTasksCount = countTasksByStatus('In Progress');
-      completedTasksCount = countTasksByStatus('Completed');
+  const loadTasks = async() => {
+    const data = await getCurrentProjectDetails(projectId)
+    if(data !== null){
+      setTasks(data.tasks)
     }
-    loadTasks()
+    newTasksCount = countTasksByStatus('Pending');
+    inProgressTasksCount = countTasksByStatus('In Progress');
+    completedTasksCount = countTasksByStatus('Completed');
+  }
 
+  useEffect( () => {
+    loadTasks();
   },[searchQuery])
+
+  useFocusEffect(
+    React.useCallback(() => {
+      loadTasks();
+    }, [])
+  );
 
   // const newTasksCount = countTasksByStatus('New');
   
