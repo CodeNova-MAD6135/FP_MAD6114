@@ -3,8 +3,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { Swipeable } from 'react-native-gesture-handler';
 import { getUserList } from '../../data/Storage';
-
 import { getUserListOfType } from '../../data/Storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 const UserManagement = ({ navigation }) => {
 
@@ -48,13 +48,19 @@ const UserManagement = ({ navigation }) => {
     );
   };
 
+  const loadUsers = async() => {
+    const data = await getUserListOfType('member')
+    setUsers(data)
+  }
   useEffect( () => {
-    const loadUsers = async() => {
-      const data = await getUserListOfType('member')
-      setUsers(data)
-    }
     loadUsers()
   },[searchQuery])
+  useFocusEffect(
+    React.useCallback(() => {
+      // Load or refresh data here
+      loadUsers();
+    }, [])
+  );
 
   const handleDelete = (user) => {
     Alert.alert(

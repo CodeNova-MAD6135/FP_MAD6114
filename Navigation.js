@@ -183,6 +183,11 @@ const Navigation = () => {
         options={{
           title: null
         }} 
+        initialParams={{
+          projectID : null,
+          taskID: null,
+          editable:false
+        }} 
         />
       </Stack.Navigator>
     </NavigationContainer>

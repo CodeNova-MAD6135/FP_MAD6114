@@ -1,12 +1,49 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { getCurrentProjectDetails, getUserByID, updateProjectTask } from '../../data/Storage';
 
-const TaskDetail = ({ route }) => {
+const TaskDetail = ({ route,navigation }) => {
+
+
+  const {taskID, projectID, editable} = route.params;
+  const [task, setTask] = useState(null)
+  const [member,setMember] = useState(null)
+
   const [startTaskDate, setStartTaskDate] = useState(new Date());
   const [endTaskDate, setEndTaskDate] = useState(new Date());
   const [completionHours, setCompletionHours] = useState('');
+
+  const loadProject = async() => {
+    console.log('taskID:' +taskID+" and projectID:"+projectID)
+    const project = await getCurrentProjectDetails(projectID)
+    const currentTask = project.tasks.find((t) => t.taskId === taskID)
+    console.log(currentTask)
+    setTask(currentTask)
+    
+    setStartTaskDate( (currentTask.startDate) ? new Date(currentTask.startDate) : new Date())
+    setEndTaskDate( (currentTask.endDate) ? new Date(currentTask.endDate) : new Date())
+    setCompletionHours(currentTask.completionHours || '')
+    const user = await getUserByID(currentTask.assignedMember)
+    console.log(user)
+    setMember(user)
+  }
+
+  const updateTask = async() => {
+    task.startDate = startTaskDate
+    task.endDate = endTaskDate
+    task.completionHours = completionHours
+    const updated = await updateProjectTask(projectID,task)
+    if(updated){
+      Alert.alert("Success", "Task Updated", [{ text: 'Ok' }]);
+      navigation.goBack();
+    }
+  }
+
+  useEffect( () => {
+    loadProject()
+  },[])
 
   let progress = 0;
   let progressColor = '';
@@ -28,13 +65,13 @@ const TaskDetail = ({ route }) => {
         />
       </View>
       <View style={styles.taskWrap}>
-        <Text style={styles.taskName}>Task 1</Text>
-        <Text style={styles.taskDescription}>ply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letrase</Text>
+        <Text style={styles.taskName}>{task?.taskName}</Text>
+        <Text style={styles.taskDescription}>{task?.taskDescription}</Text>
         <View style={styles.contentWrap}>
           <Text style={styles.label}>Created Date:</Text><Text style={styles.value}>09/11/2023</Text>
         </View>
         <View style={styles.contentWrap}>
-          <Text style={styles.label}>Assigned Member:</Text><Text style={styles.value}>Sonia</Text>
+          <Text style={styles.label}>Assigned Member:</Text><Text style={styles.value}>{member?.name}</Text>
         </View>
         <View style={styles.memberTaskContent}>
           <View style={styles.contentWrap}>
@@ -67,9 +104,17 @@ const TaskDetail = ({ route }) => {
               keyboardType="numeric"
             />
           </View>
-          <TouchableOpacity style={styles.addButton}>
+          { editable ? (
+            <TouchableOpacity style={styles.addButton} onPress={updateTask}>
               <Text style={styles.buttonText}>Update Task</Text>
           </TouchableOpacity>
+          ):(
+            <TouchableOpacity>
+              <Text></Text>
+          </TouchableOpacity>
+          )
+          }
+          
         </View>
       </View>
     </View>

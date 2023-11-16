@@ -6,8 +6,9 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 const EditUser = ({ route, navigation }) => {
   const { user } = route.params;
   const [rate, setRate] = useState(user.rate.toString());
-  const handleSave = () => {
+  const handleSave = async() => {
     console.log(`Save user with ID ${user.id}, new rate: ${rate}`);
+    
     navigation.goBack(); // Navigate back to UserManagement after saving
   };
 
