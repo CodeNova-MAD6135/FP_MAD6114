@@ -21,6 +21,14 @@ const TaskDetail = ({ route,navigation }) => {
     const currentTask = project.tasks.find((t) => t.taskId === taskID)
     console.log(currentTask)
     setTask(currentTask)
+
+    if (currentTask.status === 'Completed') {
+      progress = 100;
+      progressColor = '#4CAF50';
+    } else if (status === 'In Progress') {
+      progress = 50;
+      progressColor = '#5D5FDE';
+    }
     
     setStartTaskDate( (currentTask.startDate) ? new Date(currentTask.startDate) : new Date())
     setEndTaskDate( (currentTask.endDate) ? new Date(currentTask.endDate) : new Date())
