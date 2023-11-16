@@ -36,12 +36,13 @@ const TaskDetail = ({ route,navigation }) => {
     if (currentTask.status === 'Completed') {
       setProgress(100) ;
       setColor('#4CAF50');
-    } else if (status === 'In Progress') {
+    } else if (currentTask.status === 'In Progress') {
       setProgress(50)
       setColor('#5D5FDE');
     }
     else{
       setProgress(0)
+      setColor('#fff')
     }
     
     setStartTaskDate( (currentTask.startDate) ? new Date(currentTask.startDate) : new Date())
