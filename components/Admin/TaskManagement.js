@@ -29,12 +29,12 @@ const TaskManagement = ({ navigation }) => {
     loadProjects();
   },[userId,searchQuery])
 
-  useFocusEffect(
-    React.useCallback(() => {
-      getUser();
-      loadProjects();
-    }, [])
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     getUser();
+  //     loadProjects();
+  //   }, [])
+  // );
 
   const filteredProjects = projects.filter( (project) => 
     project?.projectName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
