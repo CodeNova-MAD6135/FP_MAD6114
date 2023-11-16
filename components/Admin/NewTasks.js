@@ -59,7 +59,7 @@ const NewTasks = ({ route, navigation }) => {
         <FlatList
             data={filteredTasks}
             keyExtractor={(item) => item.taskId.toString()}
-            renderItem={({ item }) => <TaskCard task={item} projectId={projectId} navigation={navigation} />}
+            renderItem={({ item }) => <TaskCard task={item} projectID={projectId} navigation={navigation} />}
             style={styles.taskList}
         />
       </View>
