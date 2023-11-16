@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -18,13 +18,23 @@ import TaskDetail from './components/Common/TaskDetail';
 
 import Strings from './assets/Strings';
 import Colors from './assets/Colors';
+import { getCurrentUser } from './data/Storage';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 const TabNavigator = () => {
+  const [isAdmin,setIsAdmin] = useState(false)
+  const loadCurrentUser = async() => {
+    const user = await getCurrentUser()
+    if(user){
+      setIsAdmin(user.role === 'admin')
+    }
+  }
+  loadCurrentUser()
   return (
-    <Tab.Navigator
+
+      <Tab.Navigator
       screenOptions={({ route }) => ({
 
         tabBarLabel: () => null,
@@ -54,19 +64,28 @@ const TabNavigator = () => {
         userId : null
       }} 
     >
-      <Tab.Screen name={Strings.navProjectOverview} component={ProjectOverview} options={{ title: Strings.titleProjectOverview }} initialParams={{
+      {isAdmin ? (
+        <Tab.Screen name={Strings.navProjectOverview} component={ProjectOverview} options={{ title: Strings.titleProjectOverview }} initialParams={{
           userId : null
         }} />
+      ):null}
+      
       <Tab.Screen name={Strings.navTaskManagement} component={TaskManagement} options={{ title: Strings.titleTaskManagement }} initialParams={{
           userId : null
         }} />
-      <Tab.Screen name={Strings.navUserManagement} component={UserManagement} options={{ title: Strings.titleUserManagement }} initialParams={{
+        { isAdmin ? (
+
+        <Tab.Screen name={Strings.navUserManagement} component={UserManagement} options={{ title: Strings.titleUserManagement }} initialParams={{
           userId : null
         }} />
+
+        ): null}
+      
       <Tab.Screen name={Strings.navProfile} component={Profile} initialParams={{
           userId : null
         }} />
     </Tab.Navigator>
+    
   );
 };
 
