@@ -59,6 +59,15 @@ export const getUserListOfType = async(type) => {
         return [];
     }
 }
+export const getUserByID = async(id) => {
+    try{
+        const users = await getUserList()
+        return users.find( (u) => u.id === id ) || null
+    }
+    catch(error){
+        return null
+    }
+}
 
 
 export const loginUser = async(email,pwd) => {
@@ -193,6 +202,27 @@ export const addProjectTask = async(projectID,task) => {
         let projects = await getProjectList()
         let myProject = projects.find(project => project.projectId === projectID)
         myProject.tasks.push(task)
+        await AsyncStorage.setItem(PROJECT_DATA,JSON.stringify(projects))
+        return true
+    }
+    catch(error){
+        return false
+    }
+}
+export const updateProjectTask = async(projectID, task) => {
+    try{
+        let projects = await getProjectList()
+        let myProject = projects.find((p) => p.projectId === projectID)
+        let currentTask = myProject.tasks.find( (t) => t.taskId === task.taskId)
+        currentTask.startDate = task.startDate
+        currentTask.endDate = task.endDate
+        currentTask.completionHours = task.completionHours
+        if(task.startDate){
+            currentTask.status = 'In Progress'
+        }
+        if(task.completionHours){
+            currentTask.status = 'In Progress'
+        }
         await AsyncStorage.setItem(PROJECT_DATA,JSON.stringify(projects))
         return true
     }

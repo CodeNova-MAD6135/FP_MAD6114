@@ -3,7 +3,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Alert, } from 'react-native';
 
-const TaskCard = ({ task, navigation }) => {
+const TaskCard = ({ projectID,task, navigation }) => {
   const handleLongPress = () => {
     // Display a menu or options for edit and delete
     Alert.alert(
@@ -14,7 +14,7 @@ const TaskCard = ({ task, navigation }) => {
           text: 'Edit',
           onPress: () => {
             // Navigate or perform edit action
-            navigation.navigate('EditTask', { taskId: task.id });
+            navigation.navigate('TaskDetail', { taskID: task.taskId, projectID: projectID,editable: true });
           },
         },
         {
@@ -33,7 +33,7 @@ const TaskCard = ({ task, navigation }) => {
 
   const handleRegularPress = () => {
     // Handle regular tap
-    navigation.navigate('TaskDetail');
+    navigation.navigate('TaskDetail',{ taskID: task.taskId, projectID: projectID, editable:false });
   };
 
   const handleDelete = () => {
