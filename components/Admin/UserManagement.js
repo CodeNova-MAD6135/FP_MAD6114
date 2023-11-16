@@ -50,14 +50,15 @@ const UserManagement = ({ navigation }) => {
 
   const loadUsers = async() => {
     const data = await getUserListOfType('member')
-    setUsers(data)
+    setUsers(data);
   }
+
   useEffect( () => {
-    loadUsers()
+    loadUsers();
   },[searchQuery])
+
   useFocusEffect(
     React.useCallback(() => {
-      // Load or refresh data here
       loadUsers();
     }, [])
   );

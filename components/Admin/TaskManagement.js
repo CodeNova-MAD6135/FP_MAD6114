@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, FlatList, StyleSheet, Alert, TextInput } 
 import { Ionicons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { deleteProject, getMyProjectList, getProjectList, getCurrentUser } from '../../data/Storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 const TaskManagement = ({ navigation }) => {
 
@@ -10,85 +11,29 @@ const TaskManagement = ({ navigation }) => {
   const [userId,setUserId] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const [projects, setProjects] = useState([
-    { 
-      projectId: 1, 
-      projectName: 'Project A', 
-      projectDescription: 'ply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop p',
-      adminId: 1, 
-      createdAt: '2023-11-05',
-      status: 'Active', 
-      task: [{ 
-        taskId: 1, 
-        taskName: 'Task 1', 
-        taskDescription: 'Task 1 Description',
-        createdAt: '2023-11-06',
-        assignedMember: 1, 
-        taskStatus: 'In Progress', 
-        startDate: '2023-11-05', 
-        endDate: '2023-11-10', 
-        completionHours: 12 
-      }] 
-    },
-   
-    { 
-      projectId: 2, 
-      projectName: 'Project B', 
-      projectDescription: 'Description for Project B',
-      adminId: 2, 
-      createdAt: '2023-11-06',
-      status: 'Inactive', 
-      task: [{ 
-        taskId: 2, 
-        taskName: 'Task 2', 
-        taskDescription: 'Task 2 Description',
-        createdAt: '2023-11-06',
-        assignedMember: 2, 
-        taskStatus: 'Completed', 
-        startDate: '2023-11-07', 
-        endDate: '2023-11-12', 
-        completionHours: 18 
-      }] 
-    },
-
-    { 
-      projectId: 3, 
-      projectName: 'Project C', 
-      projectDescription: 'Description for Project B',
-      adminId: 2, 
-      createdAt: '2023-11-06',
-      status: 'Inactive', 
-      task: [{ 
-        taskId: 2, 
-        taskName: 'Task 2', 
-        taskDescription: 'Task 2 Description',
-        createdAt: '2023-11-06',
-        assignedMember: 2, 
-        taskStatus: 'Completed', 
-        startDate: '2023-11-07', 
-        endDate: '2023-11-12', 
-        completionHours: 18 
-      }]
-    },
-  ]);
+  const [projects, setProjects] = useState([]);
 
   const getUser = async() => {
     const user = await getCurrentUser()
     setUserId(user.id)
   }
 
+  const loadProjects = async() => {
+    const projects = await getMyProjectList(userId)
+    console.log(projects)
+    setProjects(projects)
+  };
+
   useEffect( () => {
-
-    getUser()
-
-    const loadProjects = async() => {
-      const projects = await getMyProjectList(userId)
-      console.log(projects)
-      setProjects(projects)
-    };
-
+    getUser();
     loadProjects();
   },[userId,searchQuery])
+
+  useFocusEffect(
+    React.useCallback(() => {
+      loadProjects();
+    }, [])
+  );
 
   const filteredProjects = projects.filter( (project) => 
     project?.projectName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
