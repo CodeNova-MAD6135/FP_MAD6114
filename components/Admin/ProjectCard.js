@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 
 const ProjectCard = ({ name, status, progress }) => {
+
+    let pro = 70
     const progressColor = progress === 100 ? '#4CAF50' : '#FFC107'; // Green if completed, yellow otherwise
 
     return (
@@ -9,7 +11,7 @@ const ProjectCard = ({ name, status, progress }) => {
         <Text style={styles.cardTitle}>{name}</Text>
         <Text>Status: {status}</Text>
         <View style={styles.progressBarContainer}>
-          <View style={[styles.progressBar, { backgroundColor: progressColor, width: `${progress}%` }]} />
+          <View style={[styles.progressBar, { backgroundColor: progressColor, width: `${(status === 'In Progress') ? 70 : progress}%` }]} />
         </View>
       </View>
     );
