@@ -221,7 +221,7 @@ export const updateProjectTask = async(projectID, task) => {
             currentTask.status = 'In Progress'
         }
         if(task.completionHours){
-            currentTask.status = 'Completed'
+            currentTask.status = 'In Progress'
         }
         await AsyncStorage.setItem(PROJECT_DATA,JSON.stringify(projects))
         return true
